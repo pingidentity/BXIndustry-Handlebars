@@ -1,4 +1,4 @@
-FROM node:lts-slim
+FROM node:lts-trixie-slim
 
 # Create working directory
 WORKDIR /app
@@ -14,6 +14,8 @@ RUN node_modules/.bin/sass scss/index.scss:public/styles.css
 
 # Expose ports
 EXPOSE 3000
+
+USER node
 
 # Start project and code-server with HTTPS
 CMD ["node", "server.js"]
