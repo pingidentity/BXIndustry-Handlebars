@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../schemas/settings.schema.json",
   "theme": {
     "primaryFont": "'Montserrat', sans-serif",
     "secondaryFont": "'Poppins', serif",
@@ -40,7 +41,13 @@
       "dialog_logo": "/company/logo.svg"
     },
     "header": {
-      "links": ["About", "Investor", "Personal", "FAQs", "Contact"]
+      "links": [
+        "About",
+        "Investor",
+        "Personal",
+        "FAQs",
+        "Contact"
+      ]
     },
     "home_page": {
       "banner": {
@@ -87,7 +94,11 @@
       "username": "",
       "title": "Latest Activity",
       "filter_header": "Filters",
-      "filters": ["All clients", "International contract", "Month"],
+      "filters": [
+        "All clients",
+        "International contract",
+        "Month"
+      ],
       "filter_button": "Search",
       "vertical_chart": {
         "image": "/company/vertical-chart.svg",
@@ -126,7 +137,13 @@
     },
     "footer": {
       "phone_number": "800 568 9678",
-      "links": ["About", "Investor", "Personal", "FAQs", "Contact"],
+      "links": [
+        "About",
+        "Investor",
+        "Personal",
+        "FAQs",
+        "Contact"
+      ],
       "copyright": "© BXCompany, {{currentYear}}.  All rights reserved."
     }
   }

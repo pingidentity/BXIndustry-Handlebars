@@ -1,3 +1,5 @@
+**Using an AI coding agent (opencode, Claude Code, etc.) on this repo?** See `AGENTS.md` for agent-oriented guidance (config levers, file structure, conventions). Want that agent to provision your PingOne environment and OIDC application for you? See `PINGONE-MCP-SETUP.md`.
+
 # Table of Contents
 
 1. [Introduction](#introduction)
@@ -130,6 +132,8 @@ Use the gear icon in the bottom right corner to open the “shortcut” page for
 ## OIDC<a name="oidc"></a>
 
 BXIndustry now supports running DaVinci flows through a PingOne OIDC Application! This leverages our [OIDC SDK](https://www.npmjs.com/package/@pingidentity-developers-experience/ping-oidc-client-sdk) developed in-house. When cloning make sure to select the `Configure With OIDC` button after you've entered your name and prospect then enter your Issuer URL and Client ID on the following screen. You can fill in these values later in your .env file if you don't have an application set up yet when you're progressing through the cloning flow. Technically the OIDC SDK and BXIndustry should work against any OIDC provider, but we have only tested it against PingOne at this time. You may need to modify some of the functions in the `public/register-functions.js` file to populate the username from your IDPs user-info endpoint.
+
+Don't have a PingOne environment or OIDC application yet? See `PINGONE-MCP-SETUP.md` for how to have an AI coding agent provision one for you via the PingOne Remote MCP Server.
 
 ## Need Help?<a name="help"></a>
 

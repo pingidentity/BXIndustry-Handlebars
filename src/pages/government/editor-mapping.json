@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../schemas/editor-mapping.schema.json",
   "theme": {
     "global": [
       {
@@ -8,7 +9,7 @@
         "cssVariable": "--bxi-primary-font"
       },
       {
-        "type": "font", 
+        "type": "font",
         "friendlyName": "Secondary Font",
         "jsonPath": "theme.secondaryFont",
         "cssVariable": "--bxi-secondary-font"
@@ -152,7 +153,7 @@
         "friendlyName": "Title",
         "jsonPath": "settings.title",
         "elementSelector": "head > title"
-      }, 
+      },
       {
         "type": "image",
         "friendlyName": "Favicon",
@@ -196,13 +197,13 @@
         "friendlyName": "Banner Background Image",
         "jsonPath": "settings.home_page.banner.background_image",
         "elementSelector": ".bxi-banner.bxi-bg-image"
-      }, 
+      },
       {
         "type": "string",
         "friendlyName": "Banner Title",
         "jsonPath": "settings.home_page.banner.title",
         "elementSelector": ".bxi-banner h1"
-      }, 
+      },
       {
         "type": "string",
         "friendlyName": "Banner Subtitle",
@@ -222,7 +223,7 @@
         "friendlyName": "Portal Title",
         "jsonPath": "settings.dashboard.portal.header",
         "elementSelector": ".bxi-dashboard-portal h2"
-      }, 
+      },
       {
         "type": "string",
         "friendlyName": "Portal Button",
