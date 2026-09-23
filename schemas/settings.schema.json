@@ -1,0 +1,48 @@
+{
+  "$id": "https://bxindustry.local/schemas/settings.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BXIndustry Vertical Settings",
+  "description": "Schema for src/pages/<vertical>/settings.json and settings/<vertical>.json. Validates the envelope that is consistent across every vertical (theme values, title, images). The 'settings' object's content blocks (header, home_page, dashboard, footer, etc.) are intentionally left permissive because their shape is bespoke per vertical - see src/pages/AGENTS.md for details. '{{currentYear}}' and '{{lastYear}}' are valid placeholder tokens anywhere a string is expected; they are replaced server-side at render time.",
+  "type": "object",
+  "required": ["theme", "settings"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path to this schema file, used for editor validation/autocomplete only. Not read by the app."
+    },
+    "theme": {
+      "type": "object",
+      "description": "Flat map of CSS values (colors, fonts, etc.) consumed by the vertical's branding.hbs, where each key is mapped to a --bxi-* CSS custom property. All values must be plain strings (e.g. '#A71E23', \"'Noto Sans', sans-serif\", or 'var(--bxi-primary-color)').",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "settings": {
+      "type": "object",
+      "description": "Page content and metadata rendered by the vertical's index.hbs/dashboard.hbs.",
+      "required": ["title", "images"],
+      "additionalProperties": true,
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Project name, displayed in <head><title> and used as the default PWA manifest name."
+        },
+        "images": {
+          "type": "object",
+          "description": "Local paths (served from public/<vertical>/) or full CDN URLs for key branding images. Set a value to '' to hide that image. Additional vertical-specific image keys (e.g. dashboard_logo) are allowed.",
+          "required": ["favicon", "apple_touch_icon", "logo", "dialog_logo"],
+          "additionalProperties": {
+            "type": "string"
+          },
+          "properties": {
+            "favicon": { "type": "string" },
+            "apple_touch_icon": { "type": "string" },
+            "logo": { "type": "string" },
+            "dialog_logo": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

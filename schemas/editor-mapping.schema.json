@@ -1,0 +1,90 @@
+{
+  "$id": "https://bxindustry.local/schemas/editor-mapping.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BXIndustry Editor Mapping",
+  "description": "Schema for src/pages/<vertical>/editor-mapping.json. Drives the in-app edit drawer (enabled via BXI_ENABLE_EDITING=true). Each entry maps a settings.json jsonPath to either a CSS variable (theme entries) or a DOM selector (content entries). This structure is consistent across every vertical, so this schema is intentionally strict - see src/pages/AGENTS.md for details.",
+  "type": "object",
+  "required": ["theme", "content"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path to this schema file, used for editor validation/autocomplete only. Not read by the app."
+    },
+    "theme": {
+      "$ref": "#/definitions/themeSectionMap"
+    },
+    "content": {
+      "$ref": "#/definitions/contentSectionMap"
+    }
+  },
+  "definitions": {
+    "themeSectionMap": {
+      "type": "object",
+      "description": "Groups of theme editor entries keyed by page name. 'global' entries apply across the whole vertical; other keys ('home', 'dashboard', or a vertical-specific extra page like 'claims'/'policies' for insurance) apply only to that page. Omit a page key entirely if that page has no editable theme values (e.g. generic has no 'dashboard').",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/themeEntry" }
+      }
+    },
+    "contentSectionMap": {
+      "type": "object",
+      "description": "Groups of content editor entries keyed by page name. 'global' entries apply across the whole vertical; other keys ('home', 'dashboard', or a vertical-specific extra page like 'claims'/'policies' for insurance) apply only to that page. Omit a page key entirely if that page has no editable content (e.g. generic has no 'dashboard').",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/contentEntry" }
+      }
+    },
+    "themeEntry": {
+      "type": "object",
+      "description": "An editable theme value, backed by a CSS custom property.",
+      "additionalProperties": false,
+      "required": ["type", "friendlyName", "jsonPath", "cssVariable"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["color", "font"]
+        },
+        "friendlyName": {
+          "type": "string",
+          "description": "Human-readable label shown in the edit drawer."
+        },
+        "jsonPath": {
+          "type": "string",
+          "pattern": "^theme\\.[A-Za-z0-9]+$",
+          "description": "Dot-path into settings.json, must point into the theme object (e.g. 'theme.primaryColor')."
+        },
+        "cssVariable": {
+          "type": "string",
+          "pattern": "^--bxi-",
+          "description": "CSS custom property name defined in the vertical's branding.hbs (e.g. '--bxi-primary-color')."
+        }
+      }
+    },
+    "contentEntry": {
+      "type": "object",
+      "description": "An editable piece of content, backed by a DOM selector.",
+      "additionalProperties": false,
+      "required": ["type", "friendlyName", "jsonPath", "elementSelector"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["string", "image"]
+        },
+        "friendlyName": {
+          "type": "string",
+          "description": "Human-readable label shown in the edit drawer."
+        },
+        "jsonPath": {
+          "type": "string",
+          "pattern": "^settings\\.",
+          "description": "Dot-path into settings.json, must point into the settings object (e.g. 'settings.home_page.banner.title'). Arrays are not supported by the editor."
+        },
+        "elementSelector": {
+          "type": "string",
+          "description": "CSS selector for the DOM element this value should be written into/read from in the browser."
+        }
+      }
+    }
+  }
+}

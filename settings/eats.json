@@ -1,4 +1,5 @@
 {
+  "$schema": "../schemas/settings.schema.json",
   "theme": {
     "primaryFont": "'Noto Sans', sans-serif",
     "secondaryFont": "'Fira Sans Condensed', sans-serif",
@@ -98,7 +99,7 @@
     },
     "dashboard": {
       "title": "Welcome",
-      "description": "Choose a category below for increased cashback", 
+      "description": "Choose a category below for increased cashback",
       "categories": [
         {
           "background_image": "/eats/product-category-1.jpg",

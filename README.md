@@ -1,3 +1,5 @@
+**Using an AI coding agent (opencode, Claude Code, etc.) on this repo?** See `AGENTS.md` for agent-oriented guidance (config levers, file structure, conventions).
+
 # Table of Contents
 
 1. [Introduction](#introduction)
