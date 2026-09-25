@@ -33,8 +33,7 @@ Note: for opencode add the following mcp service to `~/.config/opencode/opencode
 Before you start, make sure:
 
 - You have a PingOne account with an **Administrator** role.
-- An admin with the `adminMcp:update:settings` permission has enabled the MCP server for the environment/org you'll use (see the **Settings > MCP Server** page in the PingOne admin console — the client-configuration doc above shows where to get the exact server URL from that page).
-- **IMPORTANT:** Please note that you need to enable MCP Server early access and enable the MCP Server in your Administrators environment as well as any other environments you enable it on
+- **IMPORTANT:** MCP access is a two-step, per-environment opt-in: 1) enable "PingOne Remote MCP Server" under **Environment Properties > Manage Opt-Ins** for the org (this reveals a new nav item and may prompt you to refresh the console), then 2) go to that environment's **Settings > MCP Server** page and enable it there (this page is also where you'll find the exact server URL referenced in the client-configuration doc above). Do this for your Administrators environment and every other environment you want the agent to use — **including any new environment the agent creates for you mid-session** (see the troubleshooting section at the bottom of this doc for what it looks like when this step is missed).
 
 Once configured, validate the connection by asking your agent something like:
 
@@ -56,8 +55,7 @@ browser-based authorization code flow with PKCE (a public client, no
 client secret) that I can use as the OIDC application for a small demo
 web app.
 
-I'm demoing with a company called "Acme Corp" in the finance industry.
-Suggest which BXIndustry vertical (see src/pages/ in this repo) is the
+I'm demoing with a company called "Acme Corp". Suggest which BXIndustry vertical (see src/pages/ in this repo) is the
 closest fit.
 
 Before creating the OIDC application, figure out the redirect URI and
@@ -106,6 +104,16 @@ reference, and if I say yes, write it there.
 
 Finally, remind me to restart the app (npm run dev / npm start) since
 .env is only read at server startup.
+
+If any tool call against the newly created environment fails with a
+permission error (e.g. "applications:read:application" or
+"dir:read:population" not satisfied), don't just tell me to "contact my
+administrator" — tell me specifically to go into the PingOne admin
+console and, for this new environment: 1) enable "PingOne Remote MCP Server" under
+Environment Properties > Manage Opt-Ins, and 2) go to the newly-appeared Settings > MCP Server tab
+for this specific environment and enable it there too. New
+environments don't inherit MCP access from other environments, so this
+step is required every time.
 ```
 
 A few notes on this prompt:
@@ -125,5 +133,6 @@ For the full list of environment variables and more background on OIDC mode, see
 ## Notes / troubleshooting
 
 - This is an Early Access PingOne feature — check the [overview doc](https://developer.pingidentity.com/build-with-ai/pingone-mcp-server/p1-overview.html) for current limitations.
+- **Newly created environment fails every tool call with a permission error** (e.g. `applications:read:application`, `dir:read:population`, `orgmgt:read:environment` not satisfied): this is not an RBAC/role problem, it's almost always that MCP access hasn't been turned on for the *new* environment yet. In the PingOne admin console: 1) confirm "PingOne Remote MCP Server" is enabled under **Environment Properties > Manage Opt-Ins** (enabling this will prompt you to refresh the console); then 2) go to the newly visible **Settings > MCP Server** nav item (this only appears after step 1) and enable the MCP server for that specific environment. Every environment — including ones created by the agent itself during the same session — needs both steps done before any MCP tool can read/write to it. If your agent hits this, it should tell you these exact two steps rather than a generic "ask your administrator" message.
 - DaVinci-specific MCP tools require the DaVinci capability to be enabled on the environment. That's not needed for the OIDC-only setup in this guide, but will matter once widget-mode/DaVinci provisioning is documented.
 - If your agent doesn't show the PingOne MCP server as connected, re-check the per-client steps in the [client configuration doc](https://developer.pingidentity.com/build-with-ai/pingone-mcp-server/p1-client-configuration.html), including the exact server URL and client ID.
