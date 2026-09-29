@@ -27,7 +27,6 @@ Note: for opencode add the following mcp service to `~/.config/opencode/opencode
     }
   }
 }
-
 ```
 
 Before you start, make sure:
@@ -45,7 +44,7 @@ If you get a real list back, you're ready to continue.
 
 ## 2. Example prompt: provision an environment + OIDC application
 
-With the MCP connection working, you can describe what you want in plain language and let the agent create it for you. Here's an example prompt tailored to this repo (adjust the environment name, company, and vertical to your situation):
+With the MCP connection working, you can describe what you want in plain language and let the agent create it for you. Here's an example prompt tailored to this repo (adjust the environment name and company an any other customizations you'd like to make for your situation):
 
 ```
 Create a new PingOne environment named "BXI Demo - Acme Corp".
