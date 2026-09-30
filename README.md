@@ -137,7 +137,7 @@ Don't have a PingOne environment or OIDC application yet? See `PINGONE-MCP-SETUP
 
 ## Need Help?<a name="help"></a>
 
-Feel free to reach out to the demo team via our [Slack Channel](https://pingidentity.slack.com/archives/C01KH01F1MY) if you need help setting up your project or flows. This is also a great place to stay up-to-date on demo releases and submit feedback for features or bugs.
+Feel free to reach out to the demo team via our [Slack Channel](https://grid-pingidentity.enterprise.slack.com/archives/C0A8U7XD6KV) if you need help setting up your project or flows. This is also a great place to stay up-to-date on demo releases and submit feedback for features or bugs.
 
 # Development<a name="development"></a>
 
