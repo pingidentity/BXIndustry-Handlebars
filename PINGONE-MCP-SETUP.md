@@ -82,9 +82,9 @@ a .env file at the root of this repo based on .env-oidc, filling in:
 
 Then look at that vertical's src/pages/<vertical>/settings.json and
 update the text and colors references to be more relevant to
-the company where it makes sense. Don't invent fake image files - tell me
-what images I need to add to public/<vertical>/ and what settings.json
-fields to point at them.
+the company where it makes sense. Don't invent fake image files - only 
+suggest images I should change and point me to their locations in the 
+settings file.
 
 Ask me if I'd like you to seed a demo user in this environment (or if
 I'd rather create one myself in the PingOne admin console). If I say
