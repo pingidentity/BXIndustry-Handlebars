@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../schemas/editor-mapping.schema.json",
   "theme": {
     "global": [
       {
@@ -8,7 +9,7 @@
         "cssVariable": "--bxi-primary-font"
       },
       {
-        "type": "font", 
+        "type": "font",
         "friendlyName": "Secondary Font",
         "jsonPath": "theme.secondaryFont",
         "cssVariable": "--bxi-secondary-font"
@@ -152,7 +153,7 @@
         "friendlyName": "Title",
         "jsonPath": "settings.title",
         "elementSelector": "head > title"
-      }, 
+      },
       {
         "type": "image",
         "friendlyName": "Favicon",
@@ -220,13 +221,13 @@
         "friendlyName": "Hero Title",
         "jsonPath": "settings.home_page.app_hero.title",
         "elementSelector": ".app-hero h4"
-      }, 
+      },
       {
         "type": "string",
         "friendlyName": "Hero Subtitle",
         "jsonPath": "settings.home_page.app_hero.sub_title",
         "elementSelector": ".app-hero p"
-      }, 
+      },
       {
         "type": "image",
         "friendlyName": "Banner Subtitle",
@@ -238,13 +239,13 @@
         "friendlyName": "Alert Banner Message",
         "jsonPath": "settings.home_page.alert_banner.message",
         "elementSelector": ".bxi-banner span"
-      }, 
+      },
       {
         "type": "string",
         "friendlyName": "Alert Banner First Link",
         "jsonPath": "settings.home_page.alert_banner.patient_link",
         "elementSelector": ".bxi-banner .bxi-patient-link"
-      }, 
+      },
       {
         "type": "string",
         "friendlyName": "Alert Banner Second Link",

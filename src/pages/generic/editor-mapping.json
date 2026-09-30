@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../schemas/editor-mapping.schema.json",
   "theme": {
     "global": [
       {
@@ -59,7 +60,7 @@
         "friendlyName": "Title",
         "jsonPath": "settings.title",
         "elementSelector": "head > title"
-      }, 
+      },
       {
         "type": "image",
         "friendlyName": "Favicon",
