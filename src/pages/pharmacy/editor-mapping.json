@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../schemas/editor-mapping.schema.json",
   "theme": {
     "global": [
       {
@@ -8,7 +9,7 @@
         "cssVariable": "--bxi-primary-font"
       },
       {
-        "type": "font", 
+        "type": "font",
         "friendlyName": "Secondary Font",
         "jsonPath": "theme.secondaryFont",
         "cssVariable": "--bxi-secondary-font"
@@ -98,7 +99,7 @@
         "friendlyName": "Banner Background Color",
         "jsonPath": "theme.bannerBgColor",
         "cssVariable": "--bxi-pharmacy-banner-bg-color"
-      }, 
+      },
       {
         "type": "color",
         "friendlyName": "Services Background Color",
@@ -146,7 +147,7 @@
         "friendlyName": "Title",
         "jsonPath": "settings.title",
         "elementSelector": "head > title"
-      }, 
+      },
       {
         "type": "image",
         "friendlyName": "Favicon",
