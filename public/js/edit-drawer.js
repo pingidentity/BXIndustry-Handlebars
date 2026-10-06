@@ -1,3 +1,5 @@
+import { getCsrfToken } from '/js/csrf.js';
+
 (() => {
   document.getElementsByTagName('body')[0].classList.add('drawer-open');
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
@@ -12,12 +14,21 @@
   initStringFields();
   initImageFields();
 
+  document.getElementById('close-edit-drawer').addEventListener('click', () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('edit');
+    window.location.href = `${url.pathname}${url.search}`;
+  });
+
   document.getElementById('reset-all-settings').addEventListener('click', async ({ target }) => {
     
     if (confirm('Are you sure? All changes you\'ve made to the current vertical will be lost.')) {
       target.disabled = true;
       const response = await fetch(`/${vertical}/settings/reset`, {
         method: 'POST',
+        headers: {
+          'x-csrf-token': await getCsrfToken(),
+        },
       });
 
       if (response.ok) {
@@ -237,12 +248,15 @@
   }
 
   function updateSettings(jsonPath, value) {
-    fetch(`/${vertical}/settings`, {
-      method: 'PUT',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ jsonPath: jsonPath, value: value}),
+    getCsrfToken().then((csrfToken) => {
+      fetch(`/${vertical}/settings`, {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
+        },
+        body: JSON.stringify({ jsonPath: jsonPath, value: value}),
+      });
     });
   }
 

@@ -1,5 +1,4 @@
 {
-  "$schema": "../schemas/settings.schema.json",
   "theme": {
     "primaryFont": "'Arimo', sans-serif",
     "secondaryFont": "'Fira Sans Condensed', sans-serif",

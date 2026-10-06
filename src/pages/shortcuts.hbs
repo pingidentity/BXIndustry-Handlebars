@@ -153,10 +153,16 @@
         }, 2000)
       });
 
-      document.getElementById('reset-settings').addEventListener('click', () => {
+      document.getElementById('reset-settings').addEventListener('click', async () => {
         if (confirm('Are you sure? Any changes you\'ve made to any verticals will be reset to default.')) {
+          const tokenResponse = await fetch('/csrf-token');
+          const { token } = await tokenResponse.json();
+
           fetch('/settings/reset', {
             method: 'POST',
+            headers: {
+              'x-csrf-token': token,
+            },
           });
         }
       });

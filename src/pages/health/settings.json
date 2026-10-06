@@ -1,5 +1,4 @@
 {
-  "$schema": "../../../schemas/settings.schema.json",
   "theme": {
     "primaryFont": "'capitolium-2', serif",
     "secondaryFont": "'filson-soft', sans-serif",

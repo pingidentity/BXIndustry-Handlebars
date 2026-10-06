@@ -2,6 +2,7 @@ import FlowContainerWrapper from '/js/flow-container-wrapper.js';
 import initFunctionRegistry from '/js/function-registry.js';
 import Logger from '/js/logger.js';
 import registerFunctions from '/register-functions.js';
+import { getCsrfToken } from '/js/csrf.js';
 
 (async function () {
   const logger = new Logger(window._env_.BXI_DEBUG_LOGGING === 'true');
@@ -178,6 +179,7 @@ import registerFunctions from '/register-functions.js';
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-csrf-token': await getCsrfToken(),
       },
       body: JSON.stringify(
         Object.keys(tokenParams).reduce(

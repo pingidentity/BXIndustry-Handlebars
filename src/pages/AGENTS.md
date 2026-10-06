@@ -23,8 +23,6 @@ Two top-level keys:
 
 Two template placeholders are replaced server-side on every load (see `helpers.getSettingsFile`): `{{currentYear}}` and `{{lastYear}}`. Use these instead of hardcoding years in copyright strings or sample dates.
 
-**Validation:** every `settings.json` (both the live `src/pages/<vertical>/` copy and the factory-default `settings/<vertical>.json` copy) declares `"$schema": "<relative-path>/schemas/settings.schema.json"`. This schema validates the consistent envelope (`theme` values must be strings, `settings.images` must include `favicon`/`apple_touch_icon`/`logo`/`dialog_logo`) and is intentionally permissive about vertical-specific content blocks (`home_page`, `dashboard`, `footer`, etc.), since those genuinely differ per vertical. Editors/agents that support the JSON Schema `$schema` convention will validate and offer autocomplete automatically — use it to catch structural mistakes (broken envelope, wrong image keys, non-string theme values) before considering an edit done.
-
 **Important distinction:**
 - `src/pages/<vertical>/settings.json` is the **live** file — this is what's actually read/rendered, and what the edit drawer (`BXI_ENABLE_EDITING=true`) writes back to.
 - `settings/<vertical>.json` (top-level `settings/` folder, note: no `src/pages` prefix) is the **factory-default** copy used to restore defaults via `POST /<vertical>/settings/reset` (or the global `POST /settings/reset`). When applying assets/content from a BOM or prompt to a *live* demo customization, edit `src/pages/<vertical>/settings.json`. Only touch `settings/<vertical>.json` if you intend to change what "reset to default" produces for that vertical (rare).
@@ -37,8 +35,6 @@ Drives the optional in-browser edit drawer (enabled via `BXI_ENABLE_EDITING=true
 - Content entries: `{ "type": "string" | "image", "friendlyName": "...", "jsonPath": "settings.xxx.yyy", "elementSelector": "<css selector>" }`
 
 If you add a new field to `settings.json` that should be user-editable in the drawer, add a matching entry here. The editor is intentionally limited to simple strings/images/colors/fonts — not arrays — so array-based content (offers lists, nav links, etc.) is edited by hand in `settings.json` only.
-
-**Validation:** every `editor-mapping.json` declares `"$schema": "<relative-path>/schemas/editor-mapping.schema.json"`. Unlike `settings.schema.json`, this schema is strict (`additionalProperties: false` on entry objects) because this file's structure — `theme`/`content` top-level keys, each containing named page sections (`global`, `home`, `dashboard`, or a vertical-specific extra page such as insurance's `claims`/`policies`) of typed entries — is fully consistent across every vertical today.
 
 ## `branding.hbs`
 

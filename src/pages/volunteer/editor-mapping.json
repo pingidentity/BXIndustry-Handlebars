@@ -1,5 +1,4 @@
 {
-  "$schema": "../../../schemas/editor-mapping.schema.json",
   "theme": {
     "global": [
       {

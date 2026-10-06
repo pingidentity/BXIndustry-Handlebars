@@ -225,6 +225,21 @@ function getEditorMappingFile(vertical) {
   return {};
 }
 
+/**
+ * Combine settings.json with environment parameters to be passed to handlebars templates/front-end
+ * Please note .env parameters are manually whitelisted in resources/handlebars.js for security reasons
+ *
+ * @param {string} vertical
+ * @param {Object} bxiEnvVars - result of getBxiEnvironmentVariables()
+ * @returns {Object} view params for the given vertical
+ */
+function getViewParams(vertical, bxiEnvVars) {
+  let params = getSettingsFile(vertical);
+  params.vertical = vertical;
+  params.env = bxiEnvVars;
+  return params;
+}
+
 export default {
   getBxiEnvironmentVariables,
   getVerticals,
@@ -235,4 +250,5 @@ export default {
   stripTrailingSlash,
   getVerticalLinks,
   getEditorMappingFile,
+  getViewParams,
 };

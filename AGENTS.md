@@ -96,4 +96,3 @@ See `src/pages/AGENTS.md` for the full per-vertical file breakdown.
 - `/docs` route (`src/docs/index.hbs`) — live in-app style guide (buttons, links, utility classes, SCSS mixins, icon list).
 - `settings/README.md`, `src/partials/README.md` — short in-place notes on those specific folders.
 - `src/pages/AGENTS.md` — per-vertical file structure in depth.
-- `schemas/` — JSON Schemas for `settings.json` and `editor-mapping.json`, referenced via `$schema` in every vertical's data files for editor/agent validation (see `src/pages/AGENTS.md`).

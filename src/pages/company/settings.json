@@ -1,5 +1,4 @@
 {
-  "$schema": "../../../schemas/settings.schema.json",
   "theme": {
     "primaryFont": "'Montserrat', sans-serif",
     "secondaryFont": "'Poppins', serif",
