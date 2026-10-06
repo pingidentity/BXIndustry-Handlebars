@@ -24,7 +24,7 @@ export default async function docsRoutes(fastify) {
 
   // Set up shortcuts endpoints, shows all verticals with applicable links
   fastify.get('/shortcuts', (req, reply) => {
-    const viewParams = fastify.verticals.map((vertical) => {
+    const verticalLinkData = fastify.verticals.map((vertical) => {
       const endpointLinks = helpers.getVerticalLinks(vertical);
 
       const settings = helpers.getSettingsFile(vertical).settings;
@@ -35,7 +35,10 @@ export default async function docsRoutes(fastify) {
       };
     });
 
-    viewParams.showEditLinks = fastify.enableEditing;
+    const viewParams = {
+      verticals: verticalLinkData,
+      showEditLinks: fastify.enableEditing,
+    };
 
     fastify.logger.log('/shortcuts endpoint hit, sending view data', viewParams);
     return reply.view('src/pages/shortcuts.hbs', viewParams);
