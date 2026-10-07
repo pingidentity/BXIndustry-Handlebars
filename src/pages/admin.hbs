@@ -19,10 +19,6 @@
       max-width: 720px;
     }
 
-    .admin-field-group label {
-      font-weight: 600;
-    }
-
     .admin-env-tooltip {
       display: inline-block;
       margin-left: 4px;
@@ -32,6 +28,11 @@
       width: 14px;
       height: 14px;
       margin-top: -4px;
+    }
+
+    :root {
+      /* Used for tooltip icon color */
+      --bxi-primary-color: var(--bs-blue); 
     }
   </style>
 </head>
@@ -49,21 +50,23 @@
   <div class="container py-4 admin-field-group">
     <form id="admin-env-form">
       <fieldset class="mb-4">
-        <legend class="h5">User environment variables</legend>
+        <legend class="h4">User environment variables</legend>
         {{#each shared}}
           {{> adminEnvField this}}
         {{/each}}
       </fieldset>
 
+      <hr />
+
       <fieldset class="mb-4" id="widget-group" {{#if useRedirect}}hidden{{/if}}>
-        <legend class="h5">DaVinci Widget environment variables</legend>
+        <legend class="h4">DaVinci Widget environment variables</legend>
         {{#each widget}}
           {{> adminEnvField this}}
         {{/each}}
       </fieldset>
 
       <fieldset class="mb-4" id="oidc-group" {{#unless useRedirect}}hidden{{/unless}}>
-        <legend class="h5">OIDC Redirect environment variables</legend>
+        <legend class="h4">OIDC Redirect environment variables</legend>
         {{#each oidc}}
           {{> adminEnvField this}}
         {{/each}}

@@ -118,10 +118,10 @@
             <div class="d-flex align-items-center mb-3">
               <img class="vertical-logo me-2" src="{{logo}}" alt="{{name}}" />
             </div>
-            <div class="d-flex flex-column gap-2">
+            <div class="d-flex flex-column gap-2 flex-grow-1">
               {{#each endpointLinks}}
               {{#eq @key "Dialog Examples"}}
-              <div class="d-flex align-items-center dialog-examples-link">
+              <div class="d-flex align-items-center dialog-examples-link mt-auto">
                 <a class="btn btn-sm btn-outline-secondary flex-grow-1 text-start" href="{{this}}">{{@key}}</a>
               </div>
               {{else}}
