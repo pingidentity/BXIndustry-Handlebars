@@ -1,4 +1,4 @@
-import fs from 'fs';
+import settingsStore from '../resources/stores/settings-store.js';
 
 /**
  * Global settings reset (resets all verticals' settings.json back to factory defaults).
@@ -10,10 +10,7 @@ export default async function settingsRoutes(fastify) {
     { onRequest: fastify.csrfProtection },
     function (_, reply) {
       fastify.verticals.forEach((vertical) => {
-        fs.copyFileSync(
-          `./settings/${vertical}.json`,
-          `./src/pages/${vertical}/settings.json`
-        );
+        settingsStore.reset(vertical);
       });
       reply.code(200).send();
     }

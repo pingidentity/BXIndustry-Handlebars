@@ -1,5 +1,6 @@
 import fs from 'fs';
 import crypto from 'crypto';
+import settingsStore from './stores/settings-store.js';
 
 let verticals;
 let verticalsEndpointMaps = {};
@@ -179,50 +180,28 @@ function importWithCacheBusting(fileLocation) {
  * Get a vertical's settings.json file, if we can ever use import for this, make sure to use
  * cache busting above or user's changes won't be picked up without restarting the server
  *
+ * Delegates to resources/stores/settings-store.js so the underlying storage mechanism can be
+ * swapped out later without changing any callers of this helper.
+ *
  * @param {string} vertical
  * @returns
  */
 function getSettingsFile(vertical) {
-  const settingsFile = `./src/pages/${vertical}/settings.json`;
-  const date = new Date();
-
-  // These key/value pairs are used to find and replace keys in the settings.json files,
-  // e.g. '{{currentYear}}' will be replaced with 2023 (or current year)
-  // can add additional replace keys here if needed
-  const replaceKeys = {
-    currentYear: date.getFullYear(),
-    lastYear: date.getFullYear() - 1,
-  };
-
-  // Generic vertical doesn't have a settings file (or an admin page, so don't care about username)
-  if (fs.existsSync(settingsFile)) {
-    let fileStr = fs.readFileSync(settingsFile, 'utf8');
-    Object.keys(replaceKeys).forEach((key) => {
-      fileStr = fileStr.replaceAll(`{{${key}}}`, replaceKeys[key]);
-    });
-    return JSON.parse(fileStr);
-  }
-
-  return {};
+  return settingsStore.get(vertical);
 }
 
 /**
  * Get a vertical's editor-mapping.json file, if we can ever use import for this, make sure to use
  * cache busting above or user's changes won't be picked up without restarting the server
  *
+ * Delegates to resources/stores/settings-store.js so the underlying storage mechanism can be
+ * swapped out later without changing any callers of this helper.
+ *
  * @param {string} vertical
  * @returns
  */
 function getEditorMappingFile(vertical) {
-  const settingsFile = `./src/pages/${vertical}/editor-mapping.json`;
-
-  // Generic vertical doesn't have a settings file (or an admin page, so don't care about username)
-  if (fs.existsSync(settingsFile)) {
-    let fileStr = fs.readFileSync(settingsFile, 'utf8');
-    return JSON.parse(fileStr);
-  }
-
-  return {};
+  return settingsStore.getEditorMapping(vertical);
 }
 
 /**

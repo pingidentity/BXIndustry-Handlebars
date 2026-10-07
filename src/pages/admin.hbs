@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link id="favicon" rel="icon" href="/public/generic/favicon.ico" />
+  <link id="apple-touch-icon" rel="apple-touch-icon" href="/public/generic/apple-touch-icon.png" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Admin: edit .env values" />
+
+  {{! Import bootstrap - bundle build (includes Popper) is required for tooltips to work }}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+  <link href="/styles.css" rel="stylesheet" />
+
+  <style>
+    .admin-field-group {
+      max-width: 720px;
+    }
+
+    .admin-field-group label {
+      font-weight: 600;
+    }
+
+    .admin-env-tooltip {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    .admin-env-tooltip svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    :root {
+      /* Company theme so fields and buttons are styled correctly */
+      --bxi-primary-font: 'Montserrat', sans-serif;
+      --bxi-secondary-font: 'Poppins', serif;
+      --bxi-primary-color: #002AEC;
+      --bxi-secondary-color: #070001;
+      --bxi-button-color: #FFFFFF;
+      --bxi-button-bg-color: var(--bxi-primary-color);
+      --bxi-button-bg-hover-color: #0228d5;
+      --bxi-link-button-color: var(--bxi-primary-color);
+      --bxi-link-button-hover-color: var(--bxi-secondary-color);
+      --bxi-footer-color: #FFFFFF;
+      --bxi-footer-bg-color: #0A0001;
+      --bxi-copyright-color: #817D73;
+    }
+  </style>
+</head>
+<body class="bxi">
+  <div class="container py-4 admin-field-group">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <button class="btn btn-link" id="back-button" onclick="history.back()"><< Go Back</button>
+      <h1 class="fw-bold mb-0">Admin</h1>
+      <a class="btn btn-link" href="/shortcuts">Shortcuts</a>
+    </div>
+
+    <div id="save-status" class="alert alert-success d-none" role="alert">
+      Changes successfully saved!
+    </div>
+
+    <form id="admin-env-form">
+      <fieldset class="mb-4">
+        <legend class="h5">User environment variables</legend>
+        {{#each shared}}
+          {{> adminEnvField this}}
+        {{/each}}
+      </fieldset>
+
+      <fieldset class="mb-4" id="widget-group" {{#if useRedirect}}hidden{{/if}}>
+        <legend class="h5">DaVinci Widget environment variables</legend>
+        {{#each widget}}
+          {{> adminEnvField this}}
+        {{/each}}
+      </fieldset>
+
+      <fieldset class="mb-4" id="oidc-group" {{#unless useRedirect}}hidden{{/unless}}>
+        <legend class="h5">OIDC Redirect environment variables</legend>
+        {{#each oidc}}
+          {{> adminEnvField this}}
+        {{/each}}
+      </fieldset>
+
+      <button type="submit" class="bxi-button" id="save-button" disabled>Save All</button>
+    </form>
+  </div>
+
+  <script type="module" src="/js/admin-env.js"></script>
+</body>
+</html>

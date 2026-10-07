@@ -1,6 +1,5 @@
-import fs from 'fs';
-
 import helpers from '../resources/helpers.js';
+import settingsStore from '../resources/stores/settings-store.js';
 
 /**
  * Per-vertical routes: page routes (auto-derived from src/pages/<vertical>/*.hbs), manifest.json,
@@ -53,10 +52,7 @@ export default async function verticalPageRoutes(fastify) {
       `/${vertical}/settings/reset`,
       { onRequest: fastify.csrfProtection },
       function (_, reply) {
-        fs.copyFileSync(
-          `./settings/${vertical}.json`,
-          `./src/pages/${vertical}/settings.json`
-        );
+        settingsStore.reset(vertical);
         reply.code(200).send();
       }
     );
@@ -87,22 +83,7 @@ export default async function verticalPageRoutes(fastify) {
           return;
         }
 
-        const path = `./src/pages/${vertical}/settings.json`;
-
-        // We don't want to use the getSettingFile helper here because we don't want to override the currentYear and other handles
-        const verticalSettings = JSON.parse(fs.readFileSync(path));
-
-        // This chunk of code iterates through the settings obj to find the correct path to update
-        const stack = req.body.jsonPath.split('.');
-        let settingsRef = verticalSettings;
-
-        while (stack.length > 1) {
-          settingsRef = settingsRef[stack.shift()];
-        }
-
-        settingsRef[stack.shift()] = req.body.value;
-
-        fs.writeFileSync(path, JSON.stringify(verticalSettings, null, 2));
+        settingsStore.update(vertical, req.body.jsonPath, req.body.value);
 
         reply.code(200).send();
       }

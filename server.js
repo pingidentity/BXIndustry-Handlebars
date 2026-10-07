@@ -86,6 +86,7 @@ fastify.register(import('./routes/core.js'));
 fastify.register(import('./routes/auth.js'));
 fastify.register(import('./routes/docs.js'));
 fastify.register(import('./routes/settings.js'));
+fastify.register(import('./routes/admin.js'));
 fastify.register(import('./routes/vertical-pages.js'));
 
 // Redirect 404s to base url rather than throwing errors

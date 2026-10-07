@@ -67,6 +67,16 @@
     }
   }
 
+  .form-switch {
+    input, label {
+      cursor: pointer;
+    }
+  }
+
+  .tooltip-inner {
+    color: var(--bs-tooltip-color) !important;
+  }
+
   @include button.button-styles;
   @include dialog.dialog-styles;
   @include edit-drawer.edit-drawer-styles;

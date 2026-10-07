@@ -74,6 +74,9 @@
   <div class="container positon-relative">
     <div class="d-flex justify-content-between">
       <button class="btn btn-link mt-3" id="back-button" onclick="history.back()"><< Go Back</button>
+      {{#if showEditLinks}}
+      <button class="btn btn-link mt-3" onclick="window.location.href = '/admin'">Admin</button>
+      {{/if}}
       <button class="btn btn-primary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#helpful-links">Helpful Links</button>
       <!-- Modal -->
       <div class="modal fade" id="helpful-links" tabindex="-1" aria-labelledby="helpful-links-label" aria-hidden="true">
@@ -92,6 +95,9 @@
                 <li><a href="#" id="clear-local">Clear Local Storage</a><span class="d-none text-success ms-3" id="local-cleared">&#9989; Done!</span></li>
                 <li><a href="#" id="reset-settings">Reset Settings for All Verticals</a>
                 </li>
+                {{#if showEditLinks}}
+                <li><a href="/admin">Admin: Edit Environment Variables</a></li>
+                {{/if}}
               </ul>
             </div>
           </div>

@@ -1,0 +1,69 @@
+{{#eq type "boolean"}}
+<div class="mb-3 form-check form-switch">
+  <input
+    class="form-check-input admin-env-input"
+    type="checkbox"
+    role="switch"
+    id="{{key}}"
+    name="{{key}}"
+    data-key="{{key}}"
+    data-type="boolean"
+    data-original-value="{{value}}"
+    {{#if checked}}checked{{/if}}
+  >
+  <label class="form-check-label" for="{{key}}">{{label}}</label>
+  <span class="admin-env-tooltip cursor-pointer bxi-icon-color-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="{{key}}">{{> alertIcon }}</span>
+</div>
+{{/eq}}
+{{#eq type "vertical"}}
+<div class="mb-3">
+  <label for="{{key}}" class="form-label">{{label}} <span class="admin-env-tooltip cursor-pointer bxi-icon-color-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="{{key}}">{{> alertIcon }}</span></label>
+  <select
+    class="form-select admin-env-input"
+    id="{{key}}"
+    name="{{key}}"
+    data-key="{{key}}"
+    data-type="vertical"
+    data-original-value="{{value}}"
+  >
+    {{#each options}}
+    <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
+    {{/each}}
+  </select>
+</div>
+{{/eq}}
+{{#eq type "secret"}}
+<div class="mb-3">
+  <label for="{{key}}" class="form-label">{{label}} <span class="admin-env-tooltip cursor-pointer bxi-icon-color-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="{{key}}">{{> alertIcon }}</span></label>
+  <div class="input-group">
+    <input
+      class="form-control admin-env-input"
+      type="password"
+      id="{{key}}"
+      name="{{key}}"
+      data-key="{{key}}"
+      data-type="secret"
+      data-original-value="{{value}}"
+      value="{{value}}"
+      autocomplete="off"
+    >
+    <button class="btn btn-outline-secondary admin-env-reveal" type="button" data-target="{{key}}">Show</button>
+  </div>
+</div>
+{{/eq}}
+{{#eq type "string"}}
+<div class="mb-3">
+  <label for="{{key}}" class="form-label">{{label}} <span class="admin-env-tooltip cursor-pointer bxi-icon-color-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="{{key}}">{{> alertIcon }}</span></label>
+  <input
+    class="form-control admin-env-input"
+    type="text"
+    id="{{key}}"
+    name="{{key}}"
+    data-key="{{key}}"
+    data-type="string"
+    data-original-value="{{value}}"
+    value="{{value}}"
+    autocomplete="off"
+  >
+</div>
+{{/eq}}
