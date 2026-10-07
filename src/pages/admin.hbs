@@ -25,44 +25,28 @@
 
     .admin-env-tooltip {
       display: inline-block;
-      vertical-align: middle;
       margin-left: 4px;
     }
 
     .admin-env-tooltip svg {
       width: 14px;
       height: 14px;
-    }
-
-    :root {
-      /* Company theme so fields and buttons are styled correctly */
-      --bxi-primary-font: 'Montserrat', sans-serif;
-      --bxi-secondary-font: 'Poppins', serif;
-      --bxi-primary-color: #002AEC;
-      --bxi-secondary-color: #070001;
-      --bxi-button-color: #FFFFFF;
-      --bxi-button-bg-color: var(--bxi-primary-color);
-      --bxi-button-bg-hover-color: #0228d5;
-      --bxi-link-button-color: var(--bxi-primary-color);
-      --bxi-link-button-hover-color: var(--bxi-secondary-color);
-      --bxi-footer-color: #FFFFFF;
-      --bxi-footer-bg-color: #0A0001;
-      --bxi-copyright-color: #817D73;
+      margin-top: -4px;
     }
   </style>
 </head>
 <body class="bxi">
+  <nav class="navbar navbar-expand bg-body-tertiary border-bottom shadow-sm mb-4">
+    <div class="container-fluid">
+      <button class="btn btn-link ps-0" id="back-button" onclick="history.back()">&laquo; Go Back</button>
+      {{!-- <span class="navbar-text fw-bold mx-auto">Admin</span> --}}
+      <div class="ms-auto d-flex align-items-center gap-2">
+        <a class="btn btn-outline-secondary" href="/shortcuts">Shortcuts</a>
+      </div>
+    </div>
+  </nav>
+
   <div class="container py-4 admin-field-group">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <button class="btn btn-link" id="back-button" onclick="history.back()"><< Go Back</button>
-      <h1 class="fw-bold mb-0">Admin</h1>
-      <a class="btn btn-link" href="/shortcuts">Shortcuts</a>
-    </div>
-
-    <div id="save-status" class="alert alert-success d-none" role="alert">
-      Changes successfully saved!
-    </div>
-
     <form id="admin-env-form">
       <fieldset class="mb-4">
         <legend class="h5">User environment variables</legend>
@@ -85,8 +69,13 @@
         {{/each}}
       </fieldset>
 
-      <button type="submit" class="bxi-button" id="save-button" disabled>Save All</button>
+      <div id="save-status" class="alert alert-success d-none" role="alert">
+        Changes successfully saved!
+      </div>
+
+      <button type="submit" style="color: white;" class="btn btn-primary" id="save-button" disabled>Save All</button>
     </form>
+
   </div>
 
   <script type="module" src="/js/admin-env.js"></script>
