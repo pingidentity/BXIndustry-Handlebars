@@ -21,7 +21,7 @@
 {{> pwa }}
 {{> editDrawer }}
 <script type="module" src="/bxi-davinci.js"></script>
-{{#if env.BXI_USE_REDIRECT}}
+{{#if (eq global.authnMethod "oidc")}}
 <script type="module"
   src="https://unpkg.com/@pingidentity-developers-experience/ping-oidc-client-sdk@^2/lib/ping-oidc.js"></script>
 <script type="module" src="/js/oidc.js"></script>

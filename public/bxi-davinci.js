@@ -5,7 +5,7 @@ import registerFunctions from '/register-functions.js';
 import { getCsrfToken } from '/js/csrf.js';
 
 (async function () {
-  const logger = new Logger(window._env_.BXI_DEBUG_LOGGING === 'true');
+  const logger = new Logger(window._env_.debugLogging === true);
   initFunctionRegistry(logger);
   registerFunctions(logger);
 

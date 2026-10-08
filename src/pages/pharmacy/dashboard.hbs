@@ -89,9 +89,9 @@
             class="bxi-button bxi-button--outline bxi-button--lg w-100 sidebar-button">{{settings.dashboard.portal.sidebar.button}}</button>
         </div>
       </div>
-      {{#if env.BXI_DASHBOARD_POLICY_ID}}
+      {{#if global.widget.dashboardPolicyId}}
       <div class="mb-3 bxi-component-bg-color" data-dv-flow="static"
-        data-policy-id="{{env.BXI_DASHBOARD_POLICY_ID}}"></div>
+        data-policy-id="{{global.widget.dashboardPolicyId}}"></div>
       {{/if}}
     </section>
     <footer class="bxi-footer pt-5 pb-4">

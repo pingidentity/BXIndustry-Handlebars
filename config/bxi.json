@@ -1,0 +1,47 @@
+{
+  "activeVertical": "airlines",
+  "enableEditing": true,
+  "debugLogging": false,
+  "hideShortcuts": false,
+  "showCloneButton": false,
+  "authnMethod": "widget",
+  "widget": {
+    "apiUrl": "https://auth.pingone.com",
+    "dvJsUrl": "https://assets.pingone.com/davinci/latest/davinci.js",
+    "sdkTokenUrl": "https://orchestrate-api.pingone.com",
+    "apiKey": "",
+    "companyId": "b7848c51-0711-4f1e-891a-dd8c0b75ceeb",
+    "dashboardPolicyId": "8c9e31d6373a846f6e2691cf0434e0e4",
+    "genericPolicyId": "8c9e31d6373a846f6e2691cf0434e0e4",
+    "clonePolicyId": "ed019d5b4f550102701b52351599c6a0",
+    "cloneEnvironment": "",
+    "authnButtons": [
+      {
+        "label": "Log In",
+        "policyId": "2bc736f52c6509044abf0dee389969f4"
+      },
+      {
+        "label": "Sign Up",
+        "policyId": ""
+      }
+    ],
+    "dashboardTabs": [
+      {
+        "label": "Update Profile",
+        "policyId": "ae652bff263a726f3c01ad951d58d7b8"
+      },
+      {
+        "label": "Reset Password",
+        "policyId": "55127c92b37b451bc06ea66433098b9d"
+      },
+      {
+        "label": "Manage Devices",
+        "policyId": "f9a27cc21989b02af6bd6e61e343964b"
+      }
+    ]
+  },
+  "oidc": {
+    "redirectIssuer": "https://auth.pingone.com/b2a88cca-9af9-4ab2-aa38-9db050d8553e/as",
+    "redirectClientId": "b11f4812-301b-4fb9-9195-f8ed04781fa3"
+  }
+}

@@ -15,10 +15,7 @@ export default async function verticalPageRoutes(fastify) {
       helpers.getVerticalEndpoints(vertical)
     )) {
       fastify.get(endpoint, function (req, reply) {
-        const pageViewParams = helpers.getViewParams(
-          vertical,
-          fastify.bxiEnvVars
-        ); // Must get these within endpoint or settings.json changes won't be picked up until server restarts
+        const pageViewParams = helpers.getViewParams(vertical); // Must get these within endpoint or settings.json/config/bxi.json changes won't be picked up until server restarts
         const {
           Home,
           ['Dialog Examples']: _,
@@ -29,7 +26,7 @@ export default async function verticalPageRoutes(fastify) {
         // Get query parameter to conditionally show the edit drawer
         pageViewParams.showEditDrawer = false;
 
-        if (fastify.enableEditing && req.query['edit']) {
+        if (helpers.isEditingEnabled() && req.query['edit']) {
           pageViewParams.showEditDrawer = true;
           pageViewParams.editorMapping =
             helpers.getEditorMappingFile(vertical);
@@ -74,11 +71,11 @@ export default async function verticalPageRoutes(fastify) {
         },
       },
       async function (req, reply) {
-        if (!fastify.enableEditing) {
+        if (!helpers.isEditingEnabled()) {
           reply
             .code(403)
             .send(
-              'Editing is currently disabled, set BXI_ENABLE_EDITING=true in your .env if this is a mistake'
+              'Editing is currently disabled, set "enableEditing": true in config/bxi.json if this is a mistake'
             );
           return;
         }

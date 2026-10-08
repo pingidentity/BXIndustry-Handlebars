@@ -32,6 +32,23 @@
   </select>
 </div>
 {{/eq}}
+{{#eq type "select"}}
+<div class="mb-3">
+  <label for="{{key}}" class="form-label">{{label}} <span class="admin-env-tooltip cursor-pointer bxi-icon-color-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="{{key}}">{{> alertIcon }}</span></label>
+  <select
+    class="form-select admin-env-input"
+    id="{{key}}"
+    name="{{key}}"
+    data-key="{{key}}"
+    data-type="select"
+    data-original-value="{{value}}"
+  >
+    {{#each options}}
+    <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+    {{/each}}
+  </select>
+</div>
+{{/eq}}
 {{#eq type "secret"}}
 <div class="mb-3">
   <label for="{{key}}" class="form-label">{{label}} <span class="admin-env-tooltip cursor-pointer bxi-icon-color-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="{{key}}">{{> alertIcon }}</span></label>
@@ -65,5 +82,26 @@
     value="{{value}}"
     autocomplete="off"
   >
+</div>
+{{/eq}}
+{{#eq type "array-pairs"}}
+<div class="mb-4 admin-array-field" data-key="{{key}}" data-type="array-pairs" data-original-value='{{{json value}}}'>
+  <label class="form-label d-block">{{label}} <span class="admin-env-tooltip cursor-pointer bxi-icon-color-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="{{key}}">{{> alertIcon }}</span></label>
+  <div class="admin-array-rows">
+    {{#each value}}
+    <div class="row g-2 mb-2 admin-array-row align-items-center">
+      <div class="col-5">
+        <input type="text" class="form-control form-control-sm admin-array-label" placeholder="{{../labelFieldLabel}}" value="{{this.label}}">
+      </div>
+      <div class="col-5">
+        <input type="text" class="form-control form-control-sm admin-array-policy-id" placeholder="{{../policyIdFieldLabel}}" value="{{this.policyId}}">
+      </div>
+      <div class="col-2">
+        <button type="button" class="btn btn-sm btn-outline-danger admin-array-remove-row">Remove</button>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  <button type="button" class="btn btn-sm btn-outline-secondary admin-array-add-row">Add Row</button>
 </div>
 {{/eq}}

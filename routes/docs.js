@@ -37,7 +37,7 @@ export default async function docsRoutes(fastify) {
 
     const viewParams = {
       verticals: verticalLinkData,
-      showEditLinks: fastify.enableEditing,
+      showEditLinks: helpers.isEditingEnabled(),
     };
 
     fastify.logger.log('/shortcuts endpoint hit, sending view data', viewParams);

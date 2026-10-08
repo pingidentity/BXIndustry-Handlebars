@@ -72,15 +72,15 @@
               class="bxi-color-secondary bxi-ff-secondary mt-4 mt-sm-0 fw-bold dashboard-header">{{settings.dashboard.header}}</h1>
           </div>
           <div class="row">
-            {{#if env.BXI_DASHBOARD_POLICY_ID}}
+            {{#if global.widget.dashboardPolicyId}}
             <div class="col-12 col-md-6">
               <div class="mb-3 bxi-component-bg-color p-3 h-100"
                 data-dv-flow="static"
-                data-policy-id="{{env.BXI_DASHBOARD_POLICY_ID}}"></div>
+                data-policy-id="{{global.widget.dashboardPolicyId}}"></div>
             </div>
             {{/if}}
             <div
-              class="col-12{{#if env.BXI_DASHBOARD_POLICY_ID}} col-md-6{{/if}} bxi-advertisement">
+              class="col-12{{#if global.widget.dashboardPolicyId}} col-md-6{{/if}} bxi-advertisement">
               <div
                 class="bxi-component-bg-color text-center p-3 d-flex flex-column h-100 justify-content-center align-items-center">
                 <h5

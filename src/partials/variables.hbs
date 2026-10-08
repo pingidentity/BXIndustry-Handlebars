@@ -1,8 +1,9 @@
 <script type="text/javascript">
   (function () {
-    window._env_ = {};
-    {{#each env}}
-      window._env_['{{@key}}'] = '{{this}}';
-    {{/each}}
+    window._env_ = {
+      debugLogging: {{#if global.debugLogging}}true{{else}}false{{/if}},
+      redirectIssuer: '{{global.oidc.redirectIssuer}}',
+      redirectClientId: '{{global.oidc.redirectClientId}}',
+    };
   })();
 </script>

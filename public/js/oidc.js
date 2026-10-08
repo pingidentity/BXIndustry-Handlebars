@@ -6,12 +6,12 @@
     const redirectUri = `${baseUri}${currentVertical}/dashboard`;
 
     const clientOptions = {
-      client_id: window._env_.BXI_REDIRECT_CLIENT_ID,
+      client_id: window._env_.redirectClientId,
       redirect_uri: redirectUri,
     };
 
     const client = await pingOidc.OidcClient.initializeFromOpenIdConfig(
-      window._env_.BXI_REDIRECT_ISSUER,
+      window._env_.redirectIssuer,
       clientOptions
     );
 

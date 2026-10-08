@@ -22,11 +22,10 @@ const __dirname = path.dirname(__filename);
 
 // Initialize internal variables
 const port = process.env.PORT || 3000;
-const bxiEnvVars = helpers.getBxiEnvironmentVariables();
+const globalSettings = helpers.getGlobalSettings();
 const verticals = helpers.getVerticals();
 
-const debug = process.env.BXI_DEBUG_LOGGING === 'true';
-const enableEditing = process.env.BXI_ENABLE_EDITING === 'true';
+const debug = globalSettings.debugLogging === true;
 
 const logger = new Logger(debug);
 
@@ -62,9 +61,7 @@ initHandlebars(fastify);
 
 // Make shared state available to route plugins via fastify.<name>
 fastify.decorate('logger', logger);
-fastify.decorate('bxiEnvVars', bxiEnvVars);
 fastify.decorate('verticals', verticals);
-fastify.decorate('enableEditing', enableEditing);
 
 // Redirect http traffic to https
 fastify.addHook('onRequest', (request, reply, done) => {

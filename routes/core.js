@@ -23,7 +23,7 @@ export default async function coreRoutes(fastify) {
       return;
     }
 
-    const defaultVertical = process.env.BXI_ACTIVE_VERTICAL;
+    const defaultVertical = helpers.getGlobalSettings().activeVertical;
     const redirectVertical = helpers.isValidVertical(defaultVertical)
       ? defaultVertical
       : 'company';

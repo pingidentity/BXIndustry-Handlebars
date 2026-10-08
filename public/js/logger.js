@@ -1,5 +1,5 @@
 /**
- * Logger utility class that takes in debugMode arg (from BXI_DEBUG_LOGGING in .env)
+ * Logger utility class that takes in debugMode arg (from debugLogging in config/bxi.json)
  * This is used in server.js and on front end.
  */
 class Logger {

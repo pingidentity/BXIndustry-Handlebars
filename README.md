@@ -69,7 +69,7 @@ During registration you can choose to create a user with an email and password o
 
 ## Cloning<a name="cloning"></a>
 
-To clone BXIndustry, scroll to the bottom of the page on any vertical and click the **Clone BXIndustry** button. During the cloning process, you can choose to bootstrap your clone to DaVinci through Widgets or OIDC (i.e. redirect through a PingOne Application). When creating a configuring BXIndustry to use DaVinci flows via widgets, you can modify all DaVinci API values or leave them as-is to use the default settings. If you are configuring BXIndustry to use OIDC you will need to provide your own Issuer Url and Client Id since we can't account for additional domains in Redirect URIs, you can leave those fields empty and populate them in the .env file in your project later if needed. See the [environment](#environment) section.
+To clone BXIndustry, scroll to the bottom of the page on any vertical and click the **Clone BXIndustry** button. During the cloning process, you can choose to bootstrap your clone to DaVinci through Widgets or OIDC (i.e. redirect through a PingOne Application). When creating a configuring BXIndustry to use DaVinci flows via widgets, you can modify all DaVinci API values or leave them as-is to use the default settings. If you are configuring BXIndustry to use OIDC you will need to provide your own Issuer Url and Client Id since we can't account for additional domains in Redirect URIs, you can leave those fields empty and populate them in the config/bxi.json file in your project later if needed. See the [environment](#environment) section.
 
 **Note: The clone form will pre-populate the default authentication and registration flows. These values can be modified to import your own custom flows or leave them as-is to use the default settings.**
 
@@ -105,11 +105,11 @@ In order to use BXIndustry with your PingOne environment, please configure you e
    - Make sure to select this new web app in any PingOne Authentication nodes in your authentication flow or the flow will throw an error when it tries to create a session.
 5. Create a new DaVinci application and add flow policies for each of those flows.
    - Note the policy IDs and API Key and include them in the form when cloning the BXIndustry repository.
-   - If you have already cloned BXIndustry you can update those values in the .env file at the root of the project.
+   - If you have already cloned BXIndustry you can update those values in the config/bxi.json file at the root of the project.
 
 ## An (IMPORTANT!!) Note on Versioning<a name="versioning-note"></a>
 
-We recommend making as many changes in your DaVinci flows as you can. Changing the BXI source code can can be powerful for customizing your app but could result in conflicts when we release new features and bug fixes. When we release changes, if you cloned the repo with git you can run `git pull` from the root of your project to get the latest changes. If you downloaded the project zip file, you will need to re-download and port over your `.env` file to get the latest code. Further customizations to BXI can typically be done in a small subset of files to make porting easy. See the [project structure](#project-structure) section for more details.
+We recommend making as many changes in your DaVinci flows as you can. Changing the BXI source code can can be powerful for customizing your app but could result in conflicts when we release new features and bug fixes. When we release changes, if you cloned the repo with git you can run `git pull` from the root of your project to get the latest changes. If you downloaded the project zip file, you will need to re-download and port over your `config/bxi.json` file to get the latest code. Further customizations to BXI can typically be done in a small subset of files to make porting easy. See the [project structure](#project-structure) section for more details.
 
 ## Another (IMPORTANT!!) Note on CSS<a name="css-note"></a>
 
@@ -121,7 +121,7 @@ Bootstrap 5.3 is now included in BXI and can be used within your flows. The defa
 
 ## Switching the Verticals<a name="verticals"></a>
 
-Use the gear icon in the bottom right corner to open the “shortcut” page for all of the verticals. If you'd like to change the default vertical, change the `BXI_ACTIVE_VERTICAL` variable in the .env file to one of the verticals listed in [cloning](#cloning).
+Use the gear icon in the bottom right corner to open the “shortcut” page for all of the verticals. If you'd like to change the default vertical, change the `activeVertical` field in `config/bxi.json` to one of the verticals listed in [cloning](#cloning).
 
 ## BXGeneric<a name="bxgeneric"></a>
 
@@ -131,7 +131,7 @@ Use the gear icon in the bottom right corner to open the “shortcut” page for
 
 ## OIDC<a name="oidc"></a>
 
-BXIndustry now supports running DaVinci flows through a PingOne OIDC Application! This leverages our [OIDC SDK](https://www.npmjs.com/package/@pingidentity-developers-experience/ping-oidc-client-sdk) developed in-house. When cloning make sure to select the `Configure With OIDC` button after you've entered your name and prospect then enter your Issuer URL and Client ID on the following screen. You can fill in these values later in your .env file if you don't have an application set up yet when you're progressing through the cloning flow. Technically the OIDC SDK and BXIndustry should work against any OIDC provider, but we have only tested it against PingOne at this time. You may need to modify some of the functions in the `public/register-functions.js` file to populate the username from your IDPs user-info endpoint.
+BXIndustry now supports running DaVinci flows through a PingOne OIDC Application! This leverages our [OIDC SDK](https://www.npmjs.com/package/@pingidentity-developers-experience/ping-oidc-client-sdk) developed in-house. When cloning make sure to select the `Configure With OIDC` button after you've entered your name and prospect then enter your Issuer URL and Client ID on the following screen. You can fill in these values later in your config/bxi.json file if you don't have an application set up yet when you're progressing through the cloning flow. Technically the OIDC SDK and BXIndustry should work against any OIDC provider, but we have only tested it against PingOne at this time. You may need to modify some of the functions in the `public/register-functions.js` file to populate the username from your IDPs user-info endpoint.
 
 Don't have a PingOne environment or OIDC application yet? See `PINGONE-MCP-SETUP.md` for how to have an AI coding agent provision one for you via the PingOne Remote MCP Server.
 
@@ -151,7 +151,7 @@ Out of the box, BXIndustry will will redirect a successful authentication to the
 
 ## Dashboard Pages<a name="dashboard-page"></a>
 
-Each vertical (except for generic) has a dashboard page located at `src/pages/<vertical>/dashboard.hbs` which is accessed in the browser via `<hostname>/<vertical>/dashboard`. To enable the static Dashboard DaVinci flow for all verticals, the .env file should have a value for `BXI_DASHBOARD_POLICY_ID`, and it will be loaded on each vertical at page load. Similarly, DV Buttons are available on the dashboard page as well, these can be uncommented and customized in the `src/dashboard-buttons.hbs` file.
+Each vertical (except for generic) has a dashboard page located at `src/pages/<vertical>/dashboard.hbs` which is accessed in the browser via `<hostname>/<vertical>/dashboard`. To enable the static Dashboard DaVinci flow for all verticals, `config/bxi.json` should have a value for `widget.dashboardPolicyId`, and it will be loaded on each vertical at page load. Similarly, DV Buttons are available on the dashboard page, defined by the `widget.dashboardTabs` array in `config/bxi.json` and rendered by `src/dashboard-buttons.hbs`.
 
 The Dashboard section in the file includes the `"username"` key, which will be displayed in the dashboard page header. By default, if there is a suitable value in the ID Token received from the PingOne Authentication connector at the end of your flow it will be displayed as the username, this can be customized in the `public/register-function.js` file in `bxi.pageLoad` near the top.
 
@@ -167,15 +167,15 @@ Since your customized instance of BXIndustry is run locally on your computer you
 
 Buttons to launch DaVinci flows are now located in `src/home-nav-buttons.hbs` and `src/dashboard-buttons.hbs` and are customized with HTML data attributes instead of through settings.json files.
 
-- `src/home-nav-buttons.hbs` - collection of buttons displayed in the top nav of each vertical, by default these are hooked up to flow policies defined in your .env file
-- `src/dashboard-buttons.hbs` - collection of buttons displayed in the top of the dashboard content section of each vertical, there are no defaults, however examples have been left commented out in the file for reference
+- `src/home-nav-buttons.hbs` - collection of buttons displayed in the top nav of each vertical, rendered from the `widget.authnButtons` array in `config/bxi.json`
+- `src/dashboard-buttons.hbs` - collection of buttons displayed in the top of the dashboard content section of each vertical, rendered from the `widget.dashboardTabs` array in `config/bxi.json`
 - `public/register-functions.js` - register callback functions that can be run during various stages of application/flow execution (see [bxi-davinci.js](#bxi-davinci-js) for more information)
 
 ### Vertical Files<a name="vertical-files"></a>
 
-Each vertical contains four files in case you only need to focus on one vertical for your demo, these are located in `src/pages/<vertical>`:
+Each vertical contains a handful of files in case you only need to focus on one vertical for your demo:
 
-- `src/pages/<vertical>/settings.json` - Simple content changes may be made in this file
+- `config/<vertical>.settings.json` - Simple content changes may be made in this file
 - `src/pages/<vertical>/index.hbs` - root page of your vertical (e.g., `<hostname>/company`), contains home page HTML
 - `src/pages/<vertical>/dashboard.hbs` - dashboard page for your vertical (e.g., `<hostname>/company/dashboard`), contains dashboard HTML
 - `src/pages/<vertical>/branding.hbs` - handlebars file that contains CSS variables used for branding
@@ -185,8 +185,8 @@ Each vertical contains four files in case you only need to focus on one vertical
 Each vertical has an independent **settings.json** file.
 For example:
 
-- `src/pages/airlines/settings.json`
-- `src/pages/education/settings.json`
+- `config/airlines.settings.json`
+- `config/education.settings.json`
 - ...
 
 Settings files provide the ability to make quick changes for vertical text and images.
@@ -205,7 +205,7 @@ Color and other branding options are located in `branding.hbs`.
     </style>
 ```
 
-BXIndustry also includes a drawer for editing. To enable this, you need to add a variable to the .env file at the root of your project (`BXI_ENABLE_EDITING=true`). Then you can navigate to the editable page using the pencil links on the shortcuts page. We recommend setting that env variable to true only as you are making changes, then setting it back to false (especially while you're conducting a demo with a prospect) as anyone can access that drawer and make edits. The editor is limited to branding (colors and fonts) and basic content (strings and images that are not contained in an array in the settings.json). If having the ability to edit additional sections of the settings.json file through the drawer would be helpful, please let us know in the Slack channel.
+BXIndustry also includes a drawer for editing. To enable this, set `"enableEditing": true` in `config/bxi.json` at the root of your project. Then you can navigate to the editable page using the pencil links on the shortcuts page. We recommend setting that flag to true only as you are making changes, then setting it back to false (especially while you're conducting a demo with a prospect) as anyone can access that drawer and make edits. The editor is limited to branding (colors and fonts) and basic content (strings and images that are not contained in an array in the settings.json). If having the ability to edit additional sections of the settings.json file through the drawer would be helpful, please let us know in the Slack channel.
 
 ### Images/Static Content<a name="images"></a>
 
@@ -259,7 +259,7 @@ Generally speaking you should not need to change files that were not previously 
 - `public/js/*` - internal BXI JavaScript resources
 - `public/bxi-davinci.js` - internal JavaScript file wrapping DaVinci and bootstrapping [data-attributes](#bxi-davinci-js)
 - `resources/handlebars.js` - handlebars initialization (partials, etc), used by `server.js`
-- `resources/helpers.js` - helpers used by `server.js` if you need to whitelist additional .env variables (for availability in .hbs files or `window._env_`) you can do so near the top
+- `resources/helpers.js` - helpers used by `server.js`, including building the `global` object made available in `.hbs` files from `config/bxi.json`
 - `scss/*` - SCSS that is compiled into `public/styles.css`, each vertical has a `customizations.scss` file for vertical branding tweaks
 - `src/partials/*` - internal handlebars partials, if you add additional partials they will be automatically picked up on server initialization, see `resources/handlebars.js` for information on partial naming
 
@@ -267,7 +267,7 @@ Generally speaking you should not need to change files that were not previously 
 
 With the new version of BXI, it is easier to further customize where and how you launch flows! Default configurations are now plain HTML in the `src/home-nav-buttons.hbs` and `src/dashboard-buttons.hbs` file. These are in a centralized location so they can be used in all verticals!
 
-**Note: It is not recommended to include company id or api key in your front-end HTML or JavaScript for security reasons. Try to keep all of your flow policies in the same DaVinci Environment and Application and set the appropriate values in the .env file. That being said data attributes for overriding api key and company id are provided for edge cases.**
+**Note: It is not recommended to include company id or api key in your front-end HTML or JavaScript for security reasons. Try to keep all of your flow policies in the same DaVinci Environment and Application and set the appropriate values in `config/bxi.json`. That being said data attributes for overriding api key and company id are provided for edge cases.**
 
 You can manually configure html elements to load flows by applying the following attributes to any element:
 
@@ -275,8 +275,8 @@ You can manually configure html elements to load flows by applying the following
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------: | :---------------------------------------: |
 | `data-dv-flow`           | How your flow will be loaded on the page, value options are 'static' or 'modal'                                                                       |             -              |                    Yes                    |
 | `data-policy-id`         | Policy ID that will be used to invoke your flow                                                                                                       |             -              | Yes (unless `data-url-policy-id` is used) |
-| `data-company-id`        | Company ID that will be used to invoke your flow                                                                                                      | `BXI_COMPANY_ID` from .env |
-| `data-api-key`           | API Key that will be used to invoke your flow (not recommended)                                                                                       |  `BXI_API_KEY` from .env   |
+| `data-company-id`        | Company ID that will be used to invoke your flow                                                                                                      | `widget.companyId` from config/bxi.json |
+| `data-api-key`           | API Key that will be used to invoke your flow (not recommended)                                                                                       |  `widget.apiKey` from config/bxi.json   |
 | `data-hide-logo`         | If "true" the vertical logo on the resulting modal will be hidden                                                                                     |          `false`           |
 | `data-url-policy-id`     | If set, will look for the policy ID in a URL parameter of the same name                                                                               |             -              |
 | `data-url-company-id`    | If set, will look for the company ID in a URL parameter of the same name                                                                              |             -              |
@@ -346,7 +346,7 @@ bxi.registerFunction(function loginParams() {
 
 **Simple Modal**
 
-This example adds a login button that launches policy id xxx and uses the API Key and Company ID included in the .env file.
+This example adds a login button that launches policy id xxx and uses the API Key and Company ID included in `config/bxi.json`.
 
 ```html
 <button data-dv-flow="modal" data-policy-id="xxx">Log In</button>
@@ -392,15 +392,11 @@ If you would like to get access or id tokens from within your own JavaScript, yo
 
 ## Debugging<a name="debugging"></a>
 
-You can add an additional key to the .env file at the base of your project to see advanced debugging output. There will be additional logging both in the server terminal and in your browser.
-
-```sh
-BXI_DEBUG_LOGGING=true
-```
+You can set `"debugLogging": true` in `config/bxi.json` at the base of your project to see advanced debugging output. There will be additional logging both in the server terminal and in your browser (server-side logging requires a restart to take effect since it's only read at startup).
 
 # Installation<a name="installation"></a>
 
-Since Glitch announced it was shutting down in July 2025 normal usage includes running it locally. We recommend setting up the project through the cloning button on the main production site for easy `.env` setup.
+Since Glitch announced it was shutting down in July 2025 normal usage includes running it locally. We recommend setting up the project through the cloning button on the main production site for easy `config/bxi.json` setup.
 
 ## Local Set Up<a name="local-set-up"></a>
 
@@ -414,33 +410,55 @@ Required software:
 git clone git@github.com:Technical-Enablement-PingIdentity/BXIndustry-Handlebars.git # or download the zip file from the repository and unzip it to the location of your choosing
 cd BXIndustry-Handlebars
 npm install
-# Generate .env file
+# Generate config/bxi.json file
 npm run dev
 ```
 
-Once you have downloaded the repo, create a `.env` file in the root of the repo and copy the contents of textarea on the final screen of the cloning flow. Alternatively you can use `.env-oidc` or `.env-widget` as a starting point and update the values as need to point to your PingOne environment.
+Once you have downloaded the repo, create a `config/bxi.json` file in the root of the repo and paste in the contents of the textarea on the final screen of the cloning flow. Alternatively you can copy `config/bxi.oidc.json` or `config/bxi.widget.json` as a starting point and update the values to point to your PingOne environment.
 
 ## Environment<a name="environment"></a>
 
-To start BXIndustry, you must have the following .env variables:
+To start BXIndustry, you must have a `config/bxi.json` file at the root of the project with the following fields:
 
-```sh
-BXI_API_URL= # Default hostname used by davinci.js for running flows
-BXI_DV_JS_URL= # Default location where davinci.js should be loaded from, this should be the full URL
-BXI_SDK_TOKEN_URL= # Default hostname to use for retrieving a DV Token for running your flows
-BXI_API_KEY= # Default API Key used for running all flows in your clone
-BXI_COMPANY_ID= # Default Company ID used for running all flows in your clone
-BXI_LOGIN_POLICY_ID= # Default Policy ID used when clicking Log In link on all verticals
-BXI_REGISTRATION_POLICY_ID= # Default Policy ID used when clicking Sign Up link on all verticals
-BXI_DASHBOARD_POLICY_ID= # Policy ID used on all dashboard pages to load a static widget
-BXI_GENERIC_POLICY_ID= # Only used on the generic vertical, static widget that is loaded on page load
-BXI_ACTIVE_VERTICAL= # vertical you will be redirected to when you hit the root page (e.g., https://127.0.0.1/) see Cloning section for options
-BXI_USE_REDIRECT= # Setting this to 'true' will override login button to trigger an OIDC redirect
-BXI_REDIRECT_ISSUER= # Required if BXI_USE_REDIRECT is true, the issuer URL for your OIDC provider
-BXI_REDIRECT_CLIENT_ID= # Required if BXI_USE_REDIRECT is true, the client ID for your OIDC provider
-BXI_DEBUG_LOGGING= # Optional, setting to 'true' will output additional information in the server and browser console
-BXI_ENABLE_EDITING= # Optional, setting to 'true' will enable the drawer for editing settings.json files
-BXI_HIDE_SHORTCUTS= # Optional, setting to 'true' will hide the gear icon that navigates to the shortcuts page
+```json
+{
+  "activeVertical": "", // vertical you will be redirected to when you hit the root page (e.g., https://127.0.0.1/) see Cloning section for options
+  "enableEditing": false, // Optional, setting to true will enable the drawer for editing settings.json files as well as the /admin page
+  "debugLogging": false, // Optional, setting to true will output additional information in the server and browser console (requires a server restart to take effect)
+  "hideShortcuts": false, // Optional, setting to true will hide the gear icon that navigates to the shortcuts page
+  "showCloneButton": false, // Optional, setting to true will show a floating "Clone BXIndustry" button
+  "authnMethod": "widget", // "widget" (DaVinci widget flows) or "oidc" (PingOne OIDC redirect) - controls the Log In/Sign Up buttons
+  "widget": {
+    "apiUrl": "", // Default hostname used by davinci.js for running flows
+    "dvJsUrl": "", // Default location where davinci.js should be loaded from, this should be the full URL
+    "sdkTokenUrl": "", // Default hostname to use for retrieving a DV Token for running your flows
+    "apiKey": "", // DaVinci API Key used for running all flows in your clone - see note below, this is usually left blank here
+    "companyId": "", // Default Company ID used for running all flows in your clone
+    "dashboardPolicyId": "", // Policy ID used on all dashboard pages to load a static widget
+    "genericPolicyId": "", // Only used on the generic vertical, static widget that is loaded on page load
+    "clonePolicyId": "", // Policy ID used by the floating "Clone BXIndustry" button (see showCloneButton)
+    "cloneEnvironment": "", // Optional parameter passed along to the clone flow
+    "authnButtons": [
+      // Array of { label, policyId } rendered as Log In/Sign Up buttons in the home page nav (only when authnMethod is "widget")
+      { "label": "Log In", "policyId": "" },
+      { "label": "Sign Up", "policyId": "" }
+    ],
+    "dashboardTabs": [
+      // Array of { label, policyId } rendered as buttons on every vertical's dashboard page
+      { "label": "Update Profile", "policyId": "" },
+      { "label": "Reset Password", "policyId": "" },
+      { "label": "Manage Devices", "policyId": "" }
+    ]
+  },
+  "oidc": {
+    "redirectIssuer": "", // Required if authnMethod is "oidc", the issuer URL for your OIDC provider
+    "redirectClientId": "" // Required if authnMethod is "oidc", the client ID for your OIDC provider
+  }
+}
 ```
 
-**Note: Changing environment variables will require you to re-run `npm start` before variables are picked up by the server and propagated throughout the application**
+Note that `widget.*` fields other than `authnButtons` are used regardless of `authnMethod` - the clone button, dashboard widget, generic vertical's widget, and `dashboardTabs` buttons all run through the DaVinci widget even when login/registration happen via OIDC.
+
+**A note on `widget.apiKey`:** unlike the rest of `config/bxi.json`, this file is meant to be safe to commit to source control, so the DaVinci API key is not stored here. If `widget.apiKey` is blank (or missing) in `config/bxi.json`, the server falls back to a `BXI_API_KEY` value in a `.env` file at the root of the project (create one if it doesn't exist - `.env` is gitignored). You can also still set `widget.apiKey` directly from the `/admin` page - doing so writes the value to `.env` instead of `config/bxi.json` for the same reason, and (unlike the rest of `config/bxi.json`) requires a server restart to take effect, since `.env` is only read once at startup.
+
+**Note: Changes to `config/bxi.json` take effect immediately (no restart required), with the exception of `debugLogging`, which is only read once at server startup.**

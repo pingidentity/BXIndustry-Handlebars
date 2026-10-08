@@ -68,14 +68,10 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# dotenv environment variables file (only PORT and infra-level concerns still live here)
 .env
 .env.test
 .env-*
-
-# explicitly allow example files
-!.env-oidc
-!.env-widget
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

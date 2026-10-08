@@ -128,9 +128,9 @@
         class="bxi-action-button bxi-button bxi-button--outline bxi-button--lg mb-5">{{>
         documentIcon class='me-2' }}<span
           class="properties-action">{{settings.dashboard.properties.action}}</span></button>
-      {{#if env.BXI_DASHBOARD_POLICY_ID}}
+      {{#if global.widget.dashboardPolicyId}}
       <div class="mb-5" data-dv-flow="static"
-        data-policy-id="{{env.BXI_DASHBOARD_POLICY_ID}}"></div>
+        data-policy-id="{{global.widget.dashboardPolicyId}}"></div>
       {{/if}}
     </section>
     <footer class="bxi-footer py-4">

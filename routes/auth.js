@@ -1,6 +1,8 @@
 /**
  * DaVinci session/auth related routes: dvtoken exchange, session-token cookie, vertical redirect cookie.
  */
+import helpers from '../resources/helpers.js';
+
 export default async function authRoutes(fastify) {
   // Get a dv token from the server, we do this in server.js as a security best practice so
   // API Keys don't need to be exposed on the front-end
@@ -8,9 +10,11 @@ export default async function authRoutes(fastify) {
     '/dvtoken',
     { onRequest: fastify.csrfProtection },
     async function (request, reply) {
+      const widgetSettings = helpers.getGlobalSettings().widget || {};
+
       // Allow for apiKey and companyId overrides to come from front end, even though it's not encouraged
-      const apiKey = request?.body.apiKey || process.env.BXI_API_KEY;
-      const companyId = request?.body.companyId || process.env.BXI_COMPANY_ID;
+      const apiKey = request?.body.apiKey || widgetSettings.apiKey;
+      const companyId = request?.body.companyId || widgetSettings.companyId;
 
       let body = {
         policyId: request.body.policyId,
@@ -26,8 +30,8 @@ export default async function authRoutes(fastify) {
         body.parameters = request.body.flowParameters;
       }
 
-      const dvBaseUrl = `${process.env.BXI_API_URL}/`;
-      const dvSdkTokenBaseUrl = `${process.env.BXI_SDK_TOKEN_URL}/v1`;
+      const dvBaseUrl = `${widgetSettings.apiUrl}/`;
+      const dvSdkTokenBaseUrl = `${widgetSettings.sdkTokenUrl}/v1`;
 
       let tokenRequest = {
         method: 'POST',

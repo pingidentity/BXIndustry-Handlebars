@@ -1,24 +1,26 @@
-import envStore from '../resources/stores/env-store.js';
-import envFieldTypes from '../resources/env-field-types.js';
+import helpers from '../resources/helpers.js';
+import globalSettingsStore from '../resources/stores/global-settings-store.js';
+import globalSettingsFieldTypes from '../resources/global-settings-field-types.js';
 
 /**
- * Admin page for editing .env values directly from the browser. Intended for local/demo use only
- * (see AGENTS.md) - gated behind BXI_ENABLE_EDITING, same flag used for the settings.json edit drawer.
+ * Admin page for editing config/bxi.json values directly from the browser. Intended for
+ * local/demo use only (see AGENTS.md) - gated behind the "enableEditing" setting, same flag used
+ * for the settings.json edit drawer.
  */
 export default async function adminRoutes(fastify) {
   fastify.get('/admin', (_, reply) => {
-    if (!fastify.enableEditing) {
+    if (!helpers.isEditingEnabled()) {
       return reply
         .code(403)
         .type('text/plain')
         .send(
-          'Admin editing is currently disabled, set BXI_ENABLE_EDITING=true in your .env if this is a mistake'
+          'Admin editing is currently disabled, set "enableEditing": true in config/bxi.json if this is a mistake'
         );
     }
 
-    const envValues = envStore.getAll();
-    const fieldGroups = envFieldTypes.buildFieldGroups(
-      envValues,
+    const settings = globalSettingsStore.get();
+    const fieldGroups = globalSettingsFieldTypes.buildFieldGroups(
+      settings,
       fastify.verticals
     );
 
@@ -28,12 +30,12 @@ export default async function adminRoutes(fastify) {
       shared: fieldGroups.shared,
       widget: fieldGroups.widget,
       oidc: fieldGroups.oidc,
-      useRedirect: envValues['BXI_USE_REDIRECT'] === 'true',
+      useRedirect: settings.authnMethod === 'oidc',
     });
   });
 
   fastify.put(
-    '/admin/env',
+    '/admin/settings',
     {
       onRequest: fastify.csrfProtection,
       schema: {
@@ -43,25 +45,24 @@ export default async function adminRoutes(fastify) {
           properties: {
             updates: {
               type: 'object',
-              additionalProperties: { type: 'string' },
             },
           },
         },
       },
     },
     (req, reply) => {
-      if (!fastify.enableEditing) {
+      if (!helpers.isEditingEnabled()) {
         return reply
           .code(403)
           .send(
-            'Editing is currently disabled, set BXI_ENABLE_EDITING=true in your .env if this is a mistake'
+            'Editing is currently disabled, set "enableEditing": true in config/bxi.json if this is a mistake'
           );
       }
 
       const { updates } = req.body;
 
       for (const [key, value] of Object.entries(updates)) {
-        const validationError = envFieldTypes.validateFieldValue(
+        const validationError = globalSettingsFieldTypes.validateFieldValue(
           key,
           value,
           fastify.verticals
@@ -72,9 +73,9 @@ export default async function adminRoutes(fastify) {
         }
       }
 
-      envStore.update(updates);
+      const { restartRequired } = globalSettingsStore.update(updates);
 
-      reply.code(200).send();
+      reply.code(200).send({ restartRequired });
     }
   );
 }

@@ -1,10 +1,10 @@
 # Setting up BXIndustry with an AI coding agent + PingOne MCP
 
-This guide shows how to use an AI coding agent (opencode, Claude Code, VS Code, Cursor, Codex CLI, etc.) together with the **PingOne Remote MCP Server** to provision a PingOne environment and OIDC application, then wire the results into this repo using **OIDC redirect mode** (`BXI_USE_REDIRECT=true`).
+This guide shows how to use an AI coding agent (opencode, Claude Code, VS Code, Cursor, Codex CLI, etc.) together with the **PingOne Remote MCP Server** to provision a PingOne environment and OIDC application, then wire the results into this repo using **OIDC redirect mode** (`authnMethod: "oidc"`).
 
 This doc intentionally does not duplicate PingOne's own documentation for connecting a client to the MCP server — that setup applies to every project, not just this one, and is kept up to date at the links below. This doc only covers what's specific to *this repo*: the example prompt to use and where the results go.
 
-> Widget mode (DaVinci flows, `BXI_API_KEY`, flow policy IDs) is not covered here yet — it depends on DaVinci-specific MCP tooling and is more involved. This guide is OIDC-only for now.
+> Widget mode (DaVinci flows, `widget.apiKey`, flow policy IDs) is not covered here yet — it depends on DaVinci-specific MCP tooling and is more involved. This guide is OIDC-only for now.
 
 ## 1. Connect your coding agent to PingOne
 
@@ -74,13 +74,14 @@ default "openid" scope), so ID tokens/userinfo include profile and
 email claims for the demo user.
 
 Once you have the issuer URL, client ID, and vertical, write (or update)
-a .env file at the root of this repo based on .env-oidc, filling in:
-- BXI_REDIRECT_ISSUER with the issuer URL
-- BXI_REDIRECT_CLIENT_ID with the application's client ID
-- BXI_ACTIVE_VERTICAL with the vertical you suggested
-- BXI_USE_REDIRECT=true
+a config/bxi.json file at the root of this repo based on
+config/bxi.oidc.json, filling in:
+- oidc.redirectIssuer with the issuer URL
+- oidc.redirectClientId with the application's client ID
+- activeVertical with the vertical you suggested
+- authnMethod set to "oidc"
 
-Then look at that vertical's src/pages/<vertical>/settings.json and
+Then look at that vertical's config/<vertical>.settings.json and
 update the text and colors references to be more relevant to
 the company where it makes sense. Don't invent fake image files - only 
 suggest images I should change and point me to their locations in the 
@@ -101,8 +102,10 @@ know so I can enable what I need. Ask me if I'd like the BOM written to
 a file in this repo (e.g. a BILL-OF-MATERIALS.md or similar) for my own
 reference, and if I say yes, write it there.
 
-Finally, remind me to restart the app (npm run dev / npm start) since
-.env is only read at server startup.
+Finally, remind me that config/bxi.json changes take effect immediately
+(no restart needed), though if we changed debugLogging I'd still need to
+restart the app (npm run dev / npm start) to pick that up since it's
+only read once at server startup.
 
 If any tool call against the newly created environment fails with a
 permission error (e.g. "applications:read:application" or
@@ -117,15 +120,15 @@ step is required every time.
 
 A few notes on this prompt:
 
-- The **issuer URL** and **client ID** map directly to `BXI_REDIRECT_ISSUER` and `BXI_REDIRECT_CLIENT_ID` in `.env` (see `.env-oidc` for the exact variable names and an example). Most coding agents can write files directly, so instead of copy/pasting these values yourself, have the agent write `.env` for you.
+- The **issuer URL** and **client ID** map directly to `oidc.redirectIssuer` and `oidc.redirectClientId` in `config/bxi.json` (see `config/bxi.oidc.json` for the exact field names and an example). Most coding agents can write files directly, so instead of copy/pasting these values yourself, have the agent write `config/bxi.json` for you.
 - The **redirect URI**/**post-logout redirect URI** should not be guessed or hardcoded to a fixed example — the agent should derive them from this repo's own code (`public/js/oidc.js`'s `redirectUri`/`endSession(baseUri)` construction, plus the dev scheme/port from `server.js` and `package.json`'s `dev`/`start` scripts). Since the redirect path includes the vertical (e.g. `/<vertical>/dashboard`), this only makes sense once the vertical has been chosen. The prompt asks for both `localhost` and `127.0.0.1` variants of each URI since browsers/OS resolve these differently and local dev sometimes needs one or the other.
 - The prompt also asks the agent to grant the application the OpenID Connect resource's `profile` and `email` scopes (alongside the default `openid` scope) so ID tokens/userinfo carry those claims — useful if `public/register-functions.js`'s `bxi.updatedUserInfo` (or your own customization) wants to display the user's name/email after login.
-- The **vertical** suggestion maps to `BXI_ACTIVE_VERTICAL`. Valid values are the directory names under `src/pages/` (see the root `AGENTS.md` or `src/pages/AGENTS.md`).
-- The **settings.json customization** is optional and only touches content/branding (`src/pages/<vertical>/settings.json`) — it's a separate step from provisioning PingOne itself, but the agent can do both in one conversation.
+- The **vertical** suggestion maps to `activeVertical` in `config/bxi.json`. Valid values are the directory names under `src/pages/` (see the root `AGENTS.md` or `src/pages/AGENTS.md`).
+- The **settings.json customization** is optional and only touches content/branding (`config/<vertical>.settings.json`) — it's a separate step from provisioning PingOne itself, but the agent can do both in one conversation.
 - The **Bill of Materials** (BOM) is the set of PingOne services enabled on an environment (SSO, MFA, DaVinci, etc.), returned by the MCP server's `getEnvironment` tool. Reviewing it up front tells you whether the environment is ready for the flows you plan to build (for example, DaVinci-specific MCP tools only work once DaVinci is enabled). Writing it into the repo is optional and purely for your own record-keeping — it isn't read by the app.
-- MCP tools cannot return secret values (client secrets, API keys, etc.). This example intentionally asks for a public OIDC client, so nothing secret needs to come back. If you later set up widget mode, you'll need to copy `BXI_API_KEY` from the PingOne/DaVinci console yourself.
+- MCP tools cannot return secret values (client secrets, API keys, etc.). This example intentionally asks for a public OIDC client, so nothing secret needs to come back. If you later set up widget mode, you'll need to copy the DaVinci API key from the PingOne console into `widget.apiKey` in `config/bxi.json` yourself.
 - MCP tools also cannot **set** secret values, including a new user's password — there's no way for the agent to give a created user an initial password. That's why the prompt asks for a real email address up front: use the app's own **Forgot Password** flow (or through the admin console) to set a password for the seeded user, since that flow depends on delivering an email to a real inbox you control.
-- After the agent writes `.env`, restart the app (`npm run dev` or `npm start`) — `.env` is only read at server startup.
+- After the agent writes `config/bxi.json`, changes take effect immediately - no restart needed (see README's Environment section for the few fields that still require one).
 
 For the full list of environment variables and more background on OIDC mode, see the [Environment](README.md#environment) and [OIDC](README.md#oidc) sections of `README.md`.
 

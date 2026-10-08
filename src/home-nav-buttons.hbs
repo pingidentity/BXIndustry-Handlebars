@@ -1,14 +1,10 @@
-{{#if env.BXI_USE_REDIRECT}}
+{{#if (eq global.authnMethod "oidc")}}
 <button class="bxi-button" id="oidc-login" disabled>Log In</button>
 {{else}}
-{{#if env.BXI_LOGIN_POLICY_ID}}
+{{#each global.widget.authnButtons}}
+{{#if this.policyId}}
 <button class="bxi-button" data-success-callback="defaultAuthnSuccess"
-  data-dv-flow="modal" data-policy-id="{{env.BXI_LOGIN_POLICY_ID}}">Log
-  In</button>
+  data-dv-flow="modal" data-policy-id="{{this.policyId}}">{{this.label}}</button>
 {{/if}}
-{{#if env.BXI_REGISTRATION_POLICY_ID}}
-<button class="bxi-button" data-success-callback="defaultAuthnSuccess"
-  data-dv-flow="modal" data-policy-id="{{env.BXI_REGISTRATION_POLICY_ID}}">Sign
-  Up</button>
-{{/if}}
+{{/each}}
 {{/if}}

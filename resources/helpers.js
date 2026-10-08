@@ -1,63 +1,20 @@
 import fs from 'fs';
 import crypto from 'crypto';
 import settingsStore from './stores/settings-store.js';
+import globalSettingsStore from './stores/global-settings-store.js';
 
 let verticals;
 let verticalsEndpointMaps = {};
 
 /**
- * Returns an object with all whitelisted (within this function) environment variables that can be used
- * in handlebars template {{env.<variable-name}} or front-end window._env_['<variable-name>']
+ * Returns the global settings object (config/bxi.json), used in handlebars templates as
+ * {{global.<key>}} or nested e.g. {{global.widget.apiKey}}. Read fresh every call so edits (via
+ * the admin UI or directly on disk) take effect without a server restart.
  *
- * @returns Object with environment variables in { [key]: value }
+ * @returns {Object} parsed config/bxi.json contents
  */
-function getBxiEnvironmentVariables() {
-  const bxiEnvVars = {};
-
-  // These will be available in the front end on window._env_[<variable-name>]
-  const whitelist = [
-    // 'BXI_API_URL', // Uncomment if needed
-    // 'BXI_API_KEY', // Uncomment if needed (not recommended for security reasons)
-    // 'BXI_COMPANY_ID', // Uncomment if needed (not recommended for security reasons)
-    'BXI_DV_JS_URL',
-    'BXI_LOGIN_POLICY_ID',
-    'BXI_REGISTRATION_POLICY_ID',
-    'BXI_PASSWORD_RESET_POLICY_ID',
-    'BXI_DEVICE_MANAGEMENT_POLICY_ID',
-    'BXI_DASHBOARD_POLICY_ID',
-    'BXI_GENERIC_POLICY_ID',
-    'BXI_CLONE_POLICY_ID',
-    'BXI_PROFILE_MANAGEMENT_POLICY_ID',
-    'BXI_SHOW_CLONE_BUTTON',
-    'BXI_HIDE_SHORTCUTS',
-    'BXI_CLONE_ENVIRONMENT',
-    'BXI_DEBUG_LOGGING',
-    'BXI_USE_REDIRECT',
-    'BXI_REDIRECT_ISSUER',
-    'BXI_REDIRECT_CLIENT_ID',
-  ];
-
-  Object.keys(process.env).forEach((env) => {
-    if (whitelist.includes(env)) {
-      bxiEnvVars[env] = process.env[env];
-    }
-  });
-
-  // Handlebars apparently doesn't process booleans in if helpers,
-  // if we delete the variable it's effectively the same as false
-  if (bxiEnvVars['BXI_SHOW_CLONE_BUTTON'] !== 'true') {
-    delete bxiEnvVars['BXI_SHOW_CLONE_BUTTON'];
-  }
-
-  if (bxiEnvVars['BXI_HIDE_SHORTCUTS'] !== 'true') {
-    delete bxiEnvVars['BXI_HIDE_SHORTCUTS'];
-  }
-
-  if (bxiEnvVars['BXI_USE_REDIRECT'] !== 'true') {
-    delete bxiEnvVars['BXI_USE_REDIRECT'];
-  }
-
-  return bxiEnvVars;
+function getGlobalSettings() {
+  return globalSettingsStore.get();
 }
 
 /**
@@ -205,22 +162,32 @@ function getEditorMappingFile(vertical) {
 }
 
 /**
- * Combine settings.json with environment parameters to be passed to handlebars templates/front-end
- * Please note .env parameters are manually whitelisted in resources/handlebars.js for security reasons
+ * Combine settings.json with global settings (config/bxi.json) to be passed to handlebars
+ * templates/front-end. Global settings are read fresh on every call (see global-settings-store.js)
+ * so edits take effect without a server restart.
  *
  * @param {string} vertical
- * @param {Object} bxiEnvVars - result of getBxiEnvironmentVariables()
  * @returns {Object} view params for the given vertical
  */
-function getViewParams(vertical, bxiEnvVars) {
+function getViewParams(vertical) {
   let params = getSettingsFile(vertical);
   params.vertical = vertical;
-  params.env = bxiEnvVars;
+  params.global = getGlobalSettings();
   return params;
 }
 
+/**
+ * Returns true if settings editing (admin page + edit drawer) is currently enabled. Read fresh
+ * from config/bxi.json on every call so toggling this no longer requires a server restart.
+ *
+ * @returns {boolean}
+ */
+function isEditingEnabled() {
+  return getGlobalSettings().enableEditing === true;
+}
+
 export default {
-  getBxiEnvironmentVariables,
+  getGlobalSettings,
   getVerticals,
   isValidVertical,
   importWithCacheBusting,
@@ -230,4 +197,5 @@ export default {
   getVerticalLinks,
   getEditorMappingFile,
   getViewParams,
+  isEditingEnabled,
 };

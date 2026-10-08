@@ -88,7 +88,7 @@ function update(vertical, jsonPath, value) {
 function reset(vertical) {
   fs.copyFileSync(
     `./settings/${vertical}.json`,
-    `./src/pages/${vertical}/settings.json`
+    `./config/${vertical}.settings.json`
   );
 }
 
@@ -110,7 +110,7 @@ function getEditorMapping(vertical) {
 }
 
 function settingsFilePath(vertical) {
-  return `./src/pages/${vertical}/settings.json`;
+  return `./config/${vertical}.settings.json`;
 }
 
 export default {

@@ -49,6 +49,10 @@ export function initHandlebarsHelpers(hbs, pathPrefix = '') {
         return arg1.split('.').reduce((r, k) => r[k], options.data.root);
     });
 
+    hbs.registerHelper('json', function(value) {
+        return JSON.stringify(value);
+    });
+
     /** 
      * These helpers are all copy/pasted from the handlebars-helpers library.
      * Unfortunately the library has been abandoned and has critical vulnerabilities so I decided to

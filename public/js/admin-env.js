@@ -1,4 +1,4 @@
-// Client-side logic for src/pages/admin.hbs - the .env editor admin page.
+// Client-side logic for src/pages/admin.hbs - the config/bxi.json editor admin page.
 import { getCsrfToken } from '/js/csrf.js';
 
 // Bootstrap tooltips require manual init (same pattern used in edit-drawer.js)
@@ -14,18 +14,35 @@ const oidcGroup = document.getElementById('oidc-group');
 
 function currentValue(input) {
   if (input.type === 'checkbox') {
-    return input.checked ? 'true' : 'false';
+    return input.checked;
   }
   return input.value;
 }
 
 function isDirty(input) {
-  return currentValue(input) !== input.dataset.originalValue;
+  return String(currentValue(input)) !== input.dataset.originalValue;
+}
+
+function arrayFieldValue(fieldEl) {
+  return Array.from(fieldEl.querySelectorAll('.admin-array-row')).map(
+    (row) => ({
+      label: row.querySelector('.admin-array-label').value,
+      policyId: row.querySelector('.admin-array-policy-id').value,
+    })
+  );
+}
+
+function isArrayFieldDirty(fieldEl) {
+  return (
+    JSON.stringify(arrayFieldValue(fieldEl)) !== fieldEl.dataset.originalValue
+  );
 }
 
 function updateSaveButtonState() {
   const inputs = Array.from(form.querySelectorAll('.admin-env-input'));
-  saveButton.disabled = !inputs.some(isDirty);
+  const arrayFields = Array.from(form.querySelectorAll('.admin-array-field'));
+  saveButton.disabled =
+    !inputs.some(isDirty) && !arrayFields.some(isArrayFieldDirty);
 }
 
 form.addEventListener('input', (event) => {
@@ -33,10 +50,10 @@ form.addEventListener('input', (event) => {
     return;
   }
 
-  // BXI_USE_REDIRECT controls which group of fields is relevant - toggle visibility client-side
+  // authnMethod controls which group of fields is relevant - toggle visibility client-side
   // immediately (before saving), without ever clearing/discarding the hidden group's values.
-  if (event.target.dataset.key === 'BXI_USE_REDIRECT') {
-    const useRedirect = event.target.checked;
+  if (event.target.dataset.key === 'authnMethod') {
+    const useRedirect = event.target.value === 'oidc';
     widgetGroup.hidden = useRedirect;
     oidcGroup.hidden = !useRedirect;
   }
@@ -53,14 +70,56 @@ form.querySelectorAll('.admin-env-reveal').forEach((button) => {
   });
 });
 
+function createArrayRow(label = '', policyId = '') {
+  const row = document.createElement('div');
+  row.className = 'row g-2 mb-2 admin-array-row align-items-center';
+  row.innerHTML = `
+    <div class="col-5">
+      <input type="text" class="form-control form-control-sm admin-array-label" value="${label}">
+    </div>
+    <div class="col-5">
+      <input type="text" class="form-control form-control-sm admin-array-policy-id" value="${policyId}">
+    </div>
+    <div class="col-2">
+      <button type="button" class="btn btn-sm btn-outline-danger admin-array-remove-row">Remove</button>
+    </div>
+  `;
+  return row;
+}
+
+form.querySelectorAll('.admin-array-field').forEach((fieldEl) => {
+  const rowsContainer = fieldEl.querySelector('.admin-array-rows');
+
+  fieldEl
+    .querySelector('.admin-array-add-row')
+    .addEventListener('click', () => {
+      rowsContainer.appendChild(createArrayRow());
+      updateSaveButtonState();
+    });
+
+  rowsContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('admin-array-remove-row')) {
+      event.target.closest('.admin-array-row').remove();
+      updateSaveButtonState();
+    }
+  });
+
+  rowsContainer.addEventListener('input', updateSaveButtonState);
+});
+
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const inputs = Array.from(form.querySelectorAll('.admin-env-input'));
+  const arrayFields = Array.from(form.querySelectorAll('.admin-array-field'));
   const updates = {};
 
   inputs.filter(isDirty).forEach((input) => {
     updates[input.dataset.key] = currentValue(input);
+  });
+
+  arrayFields.filter(isArrayFieldDirty).forEach((fieldEl) => {
+    updates[fieldEl.dataset.key] = arrayFieldValue(fieldEl);
   });
 
   if (Object.keys(updates).length === 0) {
@@ -69,7 +128,7 @@ form.addEventListener('submit', async (event) => {
 
   const csrfToken = await getCsrfToken();
 
-  const response = await fetch('/admin/env', {
+  const response = await fetch('/admin/settings', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -84,12 +143,21 @@ form.addEventListener('submit', async (event) => {
     return;
   }
 
+  const { restartRequired } = await response.json();
+
   inputs.forEach((input) => {
-    input.dataset.originalValue = currentValue(input);
+    input.dataset.originalValue = String(currentValue(input));
+  });
+
+  arrayFields.forEach((fieldEl) => {
+    fieldEl.dataset.originalValue = JSON.stringify(arrayFieldValue(fieldEl));
   });
 
   updateSaveButtonState();
 
+  saveStatus.textContent = restartRequired
+    ? 'Changes successfully saved! The API Key is stored in .env and requires a server restart to take effect.'
+    : 'Changes successfully saved!';
   saveStatus.classList.remove('d-none');
   setTimeout(() => saveStatus.classList.add('d-none'), 6000);
 });
